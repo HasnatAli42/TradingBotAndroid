@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.example.tradingbot";
+option java_multiple_files = true;
+
+
+message LoginModel{
+  string deviceToken= 1;
+  string emailAddress= 2;
+  string mobileNumber= 3;
+  string password= 4;
+  string securityToken = 5;
+  bool isRemembered = 6;
+  string myFanTextMobileNumber = 7;
+  bool isFanEnrollmentPushNotif = 8;
+  bool isFanMsgPushNotif = 9;
+  bool isPushNotification = 10;
+}

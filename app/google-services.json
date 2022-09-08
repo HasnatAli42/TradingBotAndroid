@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "756609522993",
+    "project_id": "tradingbot-2d3ed",
+    "storage_bucket": "tradingbot-2d3ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756609522993:android:3a1d8afc0f786f75386410",
+        "android_client_info": {
+          "package_name": "com.example.tradingbot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756609522993-3c68hpbck7h50971hd9k687oftdfud95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnOz0RrdsvPpaQjI-BLgkQOYgy-9-HQb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756609522993-3c68hpbck7h50971hd9k687oftdfud95.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
