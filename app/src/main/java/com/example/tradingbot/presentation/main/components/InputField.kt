@@ -11,7 +11,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.example.tradingbot.ui.theme.pass
 
 @Composable
-fun InputField(label: String, mutableState: MutableState<String>) {
+fun InputField(label: String, mutableState: MutableState<String>, isPassword : Boolean) {
     OutlinedTextField(
         value = mutableState.value,
         label = { Text(text = label) },
@@ -23,7 +23,7 @@ fun InputField(label: String, mutableState: MutableState<String>) {
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black,
             textColor = Color.Black,
-        ), visualTransformation = if (label == pass) {
+        ), visualTransformation = if (isPassword) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None

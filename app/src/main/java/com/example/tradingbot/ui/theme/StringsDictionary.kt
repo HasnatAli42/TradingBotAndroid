@@ -52,6 +52,10 @@ val Forget_your_Passwor_Disc = "A Password Reset link will be sent to your given
 
 const val tradingBot = "Smart Trader"
 const val loginUrl = "login/"
+const val profileUrl = "profile/"
+const val powerOff = "Do you want to close trading bot?"
+const val yes = "Yes"
+const val no = "No"
 
 
 
@@ -102,6 +106,7 @@ const val invalidCode = "Invalid Code"
 const val nameRegexError = "Name must consist of at least 3 characters"
 const val productionUrl = "https://trading-bot-apis.herokuapp.com/api/"
 const val devUrl = "https://trading-bot-apis.herokuapp.com/api/"
+const val imgUrl = "https://trading-bot-apis.herokuapp.com/"
 const val invalidSecurityToken = "Invalid securityToken."
 const val sessionExpired = "Session Expired Login Again"
 

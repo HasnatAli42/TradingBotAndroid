@@ -15,6 +15,7 @@ import com.example.tradingbot.domain.functions.callbacks.ApiCallBack
 import com.example.tradingbot.domain.functions.callbacks.ValueUpdateStatusLogin
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
+import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
 import com.example.tradingbot.domain.model.errorModel.ErrorModel
 import com.example.tradingbot.presentation.main.MainActivity
 import com.example.tradingbot.ui.theme.*
@@ -82,52 +83,45 @@ fun LoginApi(
 }
 
 
+@Composable
+fun ProfileApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    profileResponseModel: MutableState<ProfileResponseModel>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            profileUrl,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    var response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        var responseModel =
+                            Gson().fromJson(response, ProfileResponseModel::class.java)
+                        profileResponseModel.value = responseModel
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        var responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
 
-
-//@Composable
-//fun login(
-//    progress: MutableState<Boolean>,
-//    email: String,
-//    password: String,
-//    isFailureOccurred : MutableState<Boolean>,
-//    valueUpdateStatus: ValueUpdateStatus
-//) {
-//    val param = LoginRequestModel(email = email,password= password)
-//    val context = LocalContext.current as ComponentActivity
-//    val request = loginCronet()
-//    protoViewModelLoginModel.tokenLiveData.observe(context, {
-//        progress.value = true
-//        var json = Gson().toJson(param)
-//        request.sendParametersAndSecurityTokenRequest(
-//            getActiveFanListUrl,
-//            json,
-//            it.securityToken.toString(),
-//            object : ApiCallBack {
-//                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
-//                    progress.value = false
-//                    var response = String(byteArray)
-//                    var responseModel =
-//                        Gson().fromJson(response, GetActiveFanListResponseModel::class.java)
-//                    if (responseModel.errorCode == 0 && httpsStatusCode == 200) {
-//                        responseModel.data.forEach { it ->
-//                            fansList.add(it)
-//                        }
-//                        valueUpdateStatus.valueUpdateSuccessful()
-//                    } else if(responseModel.errorCode == 1 && responseModel.errorMessage == invalidSecurityToken){
-//                        securityTokenExpired(context,protoViewModelLoginModel,it.isRemembered)
-//                    } else {
-//                        displayErrorMsg(context,responseModel.errorMessage.toString())
-//                    }
-//                }
-//
-//                override fun onFailure() {
-//                    progress.value = false
-//                    isFailureOccurred.value = true
-//                    valueUpdateStatus.valueUpdateFailure()
-//                }
-//            })
-//    })
-//}
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
 
 
 

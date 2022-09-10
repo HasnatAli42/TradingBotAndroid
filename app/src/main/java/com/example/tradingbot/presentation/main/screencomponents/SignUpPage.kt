@@ -31,6 +31,7 @@ fun Signup(
     val user_last_name = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val confirmPassword = remember { mutableStateOf("") }
     val api_key = remember { mutableStateOf("") }
     val secret_key = remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
@@ -68,19 +69,19 @@ fun Signup(
                 Text(text = sign_up, fontSize = 30.sp, color = Color.Black)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
 
-                InputField(first_name, user_first_name)
+                InputField(first_name, user_first_name,false)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
-                InputField(last_name, user_last_name)
+                InputField(last_name, user_last_name,false)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
-                InputField(email_address, email)
+                InputField(email_address, email,false)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
-                InputField(pass, password)
+                InputField(pass, password,true)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
-                InputField(pass_confirm, password)
+                InputField(pass, confirmPassword,true)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
-                InputField(Api_key, api_key)
+                InputField(Api_key, api_key,false)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
-                InputField(Secret_key, secret_key)
+                InputField(Secret_key, secret_key,false)
 
 
                 Row(

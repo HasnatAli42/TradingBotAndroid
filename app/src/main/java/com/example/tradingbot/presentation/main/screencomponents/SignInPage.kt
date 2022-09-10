@@ -2,9 +2,11 @@ package com.example.tradingbot.presentation.main.screencomponents
 
 
 import android.content.Intent
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -51,11 +53,23 @@ fun SignInPage(
     val rememberMe = remember {
         mutableStateOf(false)
     }
+    val increment = remember { mutableStateOf(1) }
     val context = LocalContext.current as ComponentActivity
     val intent = Intent(context, HomeActivity::class.java)
     val message = remember { mutableStateOf("") }
 
-    
+
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        if (it.isRemembered && increment.value == 1) {
+            if (it.emailAddress.isNotEmpty() && it.password.isNotEmpty()) {
+                email.value = it.emailAddress
+                password.value = it.password
+                rememberMe.value = it.isRemembered
+                increment.value = 2
+            }
+        }
+    }
+
     if (isLoginCalled.value){
         isLoginCalled.value = false
         LoginApi(
@@ -69,7 +83,7 @@ fun SignInPage(
             message = message,
             valueUpdateStatus = object : ValueUpdateStatus {
                 override fun valueUpdateSuccessful() {
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     context.finish()
                     context!!.startActivity(intent)
                 }
@@ -115,9 +129,9 @@ fun SignInPage(
                 )
                 Text(text = sign_in, fontSize = 30.sp, color = Black)
                 Spacer(modifier = Modifier.padding(top = 35.dp))
-                InputField(label = email_address, mutableState = email)
+                InputField(label = email_address, mutableState = email, isPassword = false)
                 Spacer(modifier = Modifier.padding(top = 20.dp))
-                InputField(label = pass, mutableState = password)
+                InputField(label = pass, mutableState = password , isPassword = true)
                 if (isError.value) {
                     Text(text = validity_check, color = Color.Red)
                 }

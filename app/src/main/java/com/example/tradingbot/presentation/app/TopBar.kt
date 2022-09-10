@@ -22,7 +22,7 @@ import com.example.tradingbot.R
 import com.example.tradingbot.ui.theme.*
 
 @Composable
-fun TopBar(iconExpanded: MutableState<Boolean>) {
+fun MainTopBar(iconExpanded: MutableState<Boolean>) {
     Column(
         modifier = Modifier
             .fillMaxWidth(1f)
@@ -39,14 +39,16 @@ fun TopBar(iconExpanded: MutableState<Boolean>) {
                 Image(
                     painter = painterResource(id = R.drawable.stock_market),
                     contentDescription = "",
-                    Modifier.size(50.dp, 50.dp)
+                    Modifier.size(40.dp, 40.dp)
                 )
                 Text(text = tradingBot, fontFamily = RobotoCondensed, color = lightGreen, fontWeight = FontWeight.Bold, fontSize = 30.sp)
 
             Image(
-                painter = painterResource(id = R.drawable.stock_market),
+                painter = painterResource(id = R.drawable.ic_baseline_power_settings_new_24),
                 contentDescription = "",
-                Modifier.size(50.dp, 50.dp).clickable {  }
+                Modifier.size(40.dp, 40.dp).clickable {
+                    iconExpanded.value = true
+                }
             )
         }
     }
