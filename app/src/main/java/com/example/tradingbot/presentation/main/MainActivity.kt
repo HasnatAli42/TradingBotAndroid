@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            TradingBotTheme {
+            TradingBotMainTheme {
                 val context = LocalContext.current as ComponentActivity
 
                 val isLandingPageOpen = remember { mutableStateOf(true) }

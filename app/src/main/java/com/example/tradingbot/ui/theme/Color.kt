@@ -20,6 +20,8 @@ val bluecolor = Color(0xff4681f4)
 val Gradientblue = Color(0xFF0F1D3D)
 val Gradientpurple = Color(0xFF2E102A)
 val lightGreen = Color(0xFF39D3B0)
+val colorOn = Color(0xFF39D3B0)
+val colorOff = Color(0xFFFFFFFF)
 
 
 val a = Gradientblue

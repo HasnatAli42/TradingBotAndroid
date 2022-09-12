@@ -13,6 +13,8 @@ import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.use_cases.cronet.logincronet.loginCronet
 import com.example.tradingbot.domain.functions.callbacks.ApiCallBack
 import com.example.tradingbot.domain.functions.callbacks.ValueUpdateStatusLogin
+import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
+import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
@@ -124,7 +126,47 @@ fun ProfileApi(
 }
 
 
-
+@Composable
+fun AccountInfoApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    accountInfoResponseModel: MutableList<AccountInfoResponseModelItem>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            accountInfoUrl,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    var response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        var responseModel =
+                            Gson().fromJson(response, AccountInfoResponseModel::class.java)
+                        accountInfoResponseModel.clear()
+                        responseModel.forEach { data ->
+                            accountInfoResponseModel.add(data)
+                        }
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        var responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
 
 
 
