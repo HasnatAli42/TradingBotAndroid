@@ -26,18 +26,20 @@ import com.example.tradingbot.ui.theme.*
 
 @Composable
 fun MainTopBar(iconExpanded: MutableState<Boolean>) {
-    Column(
+
+    Column(verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth(1f)
             .background(gradientBlackGray)
+            .padding(top = 5.dp, start = 5.dp, end = 5.dp, bottom = 5.dp)
     ) {
-
+        Spacer(modifier = Modifier.padding(top = 25.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth(1f)
-                .padding(top = 25.dp, start = 5.dp, end = 5.dp, bottom = 5.dp)
         ) {
                 Image(
                     painter = painterResource(id = R.drawable.stock_market),
@@ -64,12 +66,12 @@ fun HomeTopBar(profileName : MutableState<String>, profileImage : MutableState<S
     Box(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+            .clip(RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp))
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier = Modifier
             .fillMaxWidth(1f)
             .background(gradientGrayblack)
-            .padding(all= 10.dp)
+            .padding(all = 10.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -103,14 +105,14 @@ fun HomeBottomBar(homeButton : MutableState<Boolean>,
     Box(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
     ) {
         Row(horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-            .fillMaxWidth(1f)
-            .background(gradientBlackGray)
-            .padding(all= 10.dp)
+                .fillMaxWidth(1f)
+                .background(gradientBlackGray)
+                .padding(all = 10.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,

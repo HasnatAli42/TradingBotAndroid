@@ -38,42 +38,39 @@ class HomeActivity : ComponentActivity() {
                 val profileName = remember { mutableStateOf(profileData.value.first_name) }
                 val profileImg = remember { mutableStateOf(profileData.value.image_url) }
 
-//                TabsButton
+//                TabsButtonStart
                 val homeButton = remember { mutableStateOf(true) }
                 val orderButton = remember { mutableStateOf(false) }
                 val positionButton = remember { mutableStateOf(false) }
                 val tradeHistoryButton = remember { mutableStateOf(false) }
                 val orderHistoryButton = remember { mutableStateOf(false) }
+//                TabsButtonEnd
 
-//                TabsButton
+                if (isInitiated.value){
+                    isInitiated.value = false
+                    ProfileApi(
+                        protoViewModelLoginModel = protoViewModelLoginModel,
+                        progress = progress,
+                        profileResponseModel = profileData,
+                        isFailureOccurred = isFailureOccurred,
+                        valueUpdateStatus = object : ValueUpdateStatus{
+                            override fun valueUpdateSuccessful() {
+                                profileName.value = profileData.value.first_name
+                                profileImg.value = profileData.value.image_url
+                            }
 
-
-
+                            override fun valueUpdateFailure() {
+                                isFailureOccurred.value = true
+                            }
+                        }
+                    )
+                }
 
 
                 Column(verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier
                     .fillMaxSize(1f)) {
-                    if (isInitiated.value){
-                        isInitiated.value = false
-                        ProfileApi(
-                            protoViewModelLoginModel = protoViewModelLoginModel,
-                            progress = progress,
-                            profileResponseModel = profileData,
-                            isFailureOccurred = isFailureOccurred,
-                            valueUpdateStatus = object : ValueUpdateStatus{
-                                override fun valueUpdateSuccessful() {
-                                    profileName.value = profileData.value.first_name
-                                    profileImg.value = profileData.value.image_url
-                                }
 
-                                override fun valueUpdateFailure() {
-                                    isFailureOccurred.value = true
-                                }
-
-                            }
-                        )
-                    }
                     HomeTopBar(profileName = profileName, profileImage = profileImg)
 
                     Column(verticalArrangement = Arrangement.Center,
@@ -85,7 +82,8 @@ class HomeActivity : ComponentActivity() {
                             HomeScreen(
                                 protoViewModelLoginModel = protoViewModelLoginModel,
                                 progress = progress,
-                                isFailureOccurred = isFailureOccurred
+                                isFailureOccurred = isFailureOccurred,
+                                profileName = profileName,
                             )
                         }else if (orderButton.value){
                             Text(text = "Order Screen")

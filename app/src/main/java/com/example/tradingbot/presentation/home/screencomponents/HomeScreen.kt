@@ -24,6 +24,7 @@ fun HomeScreen(
     protoViewModelLoginModel: ProtoViewModelLoginModel,
     progress: MutableState<Boolean>,
     isFailureOccurred : MutableState<Boolean>,
+    profileName : MutableState<String>
 ){
 
     val refresh = remember { mutableStateOf(true) }
@@ -66,7 +67,7 @@ fun HomeScreen(
     {
         if (valueUpdate.value){
             accountInfoResponseModel.forEach { data ->
-                AccountInFoCardView(Data = data, refresh = refresh)
+                AccountInFoCardView(Data = data, refresh = refresh, profileName = profileName)
                 Spacer(modifier = Modifier.padding(top= 10.dp))
             }
         }

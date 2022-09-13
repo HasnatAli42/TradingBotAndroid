@@ -36,7 +36,22 @@ fun TradingBotMainTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Co
     } else {
         LightColorPalette
     }
-
+    val systemUiController = rememberSystemUiController()
+    if(darkTheme){
+        systemUiController.setStatusBarColor(
+            color = Gradientblue
+        )
+        systemUiController.setNavigationBarColor(
+            color = Gradientpurple
+        )
+    }else{
+        systemUiController.setStatusBarColor(
+            color = Gradientblue
+        )
+        systemUiController.setNavigationBarColor(
+            color = Gradientpurple
+        )
+    }
     MaterialTheme(
         colors = colors,
         typography = Typography,
