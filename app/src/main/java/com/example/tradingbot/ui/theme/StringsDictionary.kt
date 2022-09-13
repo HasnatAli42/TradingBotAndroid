@@ -15,7 +15,7 @@ val connect_binance_desc =
     "Create a Binance API with the 'Enable Trading' option and connect it Crypto Bot AI."
 val automated_trading = "3.ENJOY AUTOMATED TRADING"
 val automated_trading_desc =
-    "After 24 hours or less, experience a hands-free,no hassle approach to your crypto trading. "
+    "After 24 hours or less, experience a hands-free, no hassle approach to your crypto trading. "
 val slogn = "Automated Crypto Investing While You Explore"
 val slogn2 =
     "Connect our Crypto Bot AI strategy to your exchange account - earn more than the average crypto trader"

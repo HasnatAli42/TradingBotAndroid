@@ -26,7 +26,6 @@ import com.example.tradingbot.ui.theme.*
 
 @Composable
 fun MainTopBar(iconExpanded: MutableState<Boolean>) {
-    Spacer(modifier = Modifier.padding(top = 22.dp))
     Box(
         modifier = Modifier
             .fillMaxWidth(1f)

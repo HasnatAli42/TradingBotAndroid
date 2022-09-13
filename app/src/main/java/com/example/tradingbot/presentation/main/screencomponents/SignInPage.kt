@@ -101,7 +101,7 @@ fun SignInPage(
     Column(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .fillMaxHeight(1f),
+            .fillMaxHeight(0.9f),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
 
@@ -110,9 +110,8 @@ fun SignInPage(
             elevation = 10.dp,
             modifier = Modifier
                 .padding(20.dp)
-
+                .fillMaxWidth(1f)
         ) {
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth(1f)

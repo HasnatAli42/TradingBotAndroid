@@ -16,6 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.use_cases.restapi.CustomProgressBar
@@ -23,6 +26,7 @@ import com.example.tradingbot.domain.use_cases.restapi.CustomWarningAlertWithRet
 import com.example.tradingbot.domain.use_cases.restapi.CustomWarningAlertWithTwoButtons
 import com.example.tradingbot.domain.use_cases.restapi.WarningsCallBack
 import com.example.tradingbot.presentation.app.MainTopBar
+import com.example.tradingbot.presentation.main.components.TermsOfUseAndPrivacyPolicy
 import com.example.tradingbot.presentation.main.screencomponents.LandingPage
 import com.example.tradingbot.presentation.main.screencomponents.SignInPage
 import com.example.tradingbot.presentation.main.screencomponents.Signup
@@ -34,7 +38,7 @@ class MainActivity : ComponentActivity() {
     private val protoViewModelLoginModel: ProtoViewModelLoginModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             TradingBotMainTheme {
                 val context = LocalContext.current as ComponentActivity
@@ -54,10 +58,16 @@ class MainActivity : ComponentActivity() {
                     .fillMaxSize(1f)
                     .background(gradientGrayblack)) {
 
-                    if (!isLandingPageOpen.value) {
+                    if(!isLandingPageOpen.value){
                         MainTopBar(iconExpanded = isAppPowerOffCalled)
                     }else{
-                        Text(text = "")
+                        Text(
+                            text = tradingBot,
+                            fontFamily = RobotoCondensed,
+                            color = lightGreen,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp
+                        )
                     }
                     if (isLandingPageOpen.value){
                         LandingPage(isLandingPageOpen = isLandingPageOpen, isSignInPageOpen = isSignInPageOpen)
@@ -78,7 +88,7 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-                    Text(text = "")
+                    TermsOfUseAndPrivacyPolicy()
                 }
                 if (progress.value) {
                     CustomProgressBar()

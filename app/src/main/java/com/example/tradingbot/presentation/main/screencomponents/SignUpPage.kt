@@ -42,21 +42,20 @@ fun Signup(
     Column(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .fillMaxHeight(1f)
-            .padding(top=50.dp, bottom = 50.dp),
+            .fillMaxHeight(0.9f),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
             elevation = 10.dp,
             modifier = Modifier
+                .fillMaxWidth(1f)
                 .padding(20.dp)
-
         ) {
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .fillMaxWidth(1f)
                     .verticalScroll(scrollState)
                     .background(Color.White)
             ) {

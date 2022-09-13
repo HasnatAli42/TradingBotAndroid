@@ -26,16 +26,12 @@ import com.example.tradingbot.R
 
 @Composable
 fun LandingPage(isLandingPageOpen: MutableState<Boolean>, isSignInPageOpen: MutableState<Boolean>) {
-    val InputFieldVariable = remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
 
-    val gradientblue = Gradientblue
-    val gradientpurple = Gradientpurple
-    val gradientGrayblack = Brush.verticalGradient(0f to gradientblue, 1000f to gradientpurple)
-    Column(
+     Column(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .fillMaxHeight(1f)
+            .fillMaxHeight(0.9f)
             .background(gradientGrayblack),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
