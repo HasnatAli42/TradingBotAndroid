@@ -26,27 +26,32 @@ import com.example.tradingbot.ui.theme.*
 
 @Composable
 fun MainTopBar(iconExpanded: MutableState<Boolean>) {
-
-    Column(verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Spacer(modifier = Modifier.padding(top = 22.dp))
+    Box(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .background(gradientBlackGray)
-            .padding(top = 5.dp, start = 5.dp, end = 5.dp, bottom = 5.dp)
+            .clip(RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp))
     ) {
-        Spacer(modifier = Modifier.padding(top = 25.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth(1f)
+                .background(gradientBlackGray)
+                .padding(top = 5.dp, start = 5.dp, end = 5.dp, bottom = 5.dp)
         ) {
-                Image(
-                    painter = painterResource(id = R.drawable.stock_market),
-                    contentDescription = "",
-                    Modifier.size(40.dp, 40.dp)
-                )
-                Text(text = tradingBot, fontFamily = RobotoCondensed, color = lightGreen, fontWeight = FontWeight.Bold, fontSize = 30.sp)
+            Image(
+                painter = painterResource(id = R.drawable.stock_market),
+                contentDescription = "",
+                Modifier.size(40.dp, 40.dp)
+            )
+            Text(
+                text = tradingBot,
+                fontFamily = RobotoCondensed,
+                color = lightGreen,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp
+            )
 
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_power_settings_new_24),
@@ -58,7 +63,7 @@ fun MainTopBar(iconExpanded: MutableState<Boolean>) {
                     }
             )
         }
-    }
+}
 }
 
 @Composable
