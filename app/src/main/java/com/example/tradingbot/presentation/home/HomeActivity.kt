@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
+import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
@@ -40,6 +41,7 @@ class HomeActivity : ComponentActivity() {
                 val isFailureOccurred = remember { mutableStateOf(false) }
                 val profileName = remember { mutableStateOf(profileData.value.first_name) }
                 val profileImg = remember { mutableStateOf(profileData.value.image_url) }
+                val valueUpdate = remember { mutableStateOf(0) }
 
 //                TabsButtonStart
                 val homeButton = remember { mutableStateOf(true) }
@@ -50,7 +52,7 @@ class HomeActivity : ComponentActivity() {
 //                TabsButtonEnd
 
 //                Data Providers
-                val accountInfoResponseModel = remember { mutableListOf<AccountInfoResponseModelItem>() }
+                val accountInfoResponseModel = remember { mutableStateOf(AccountInfoResponseModel(accountInfo = arrayListOf())) }
                 val tradeHistoryResponseModel = remember { mutableListOf<TradeHistoryResponseModelItem>() }
 
                 if (isInitiated.value){
@@ -90,6 +92,7 @@ class HomeActivity : ComponentActivity() {
                                 protoViewModelLoginModel = protoViewModelLoginModel,
                                 progress = progress,
                                 isFailureOccurred = isFailureOccurred,
+                                valueUpdate =valueUpdate,
                                 profileName = profileName,
                                 accountInfoResponseModel = accountInfoResponseModel,
                             )

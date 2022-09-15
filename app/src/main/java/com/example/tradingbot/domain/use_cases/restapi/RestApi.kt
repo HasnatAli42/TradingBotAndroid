@@ -8,12 +8,14 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.use_cases.cronet.logincronet.loginCronet
 import com.example.tradingbot.domain.functions.callbacks.ApiCallBack
 import com.example.tradingbot.domain.functions.callbacks.ValueUpdateStatusLogin
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
+import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelApi
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
@@ -132,7 +134,7 @@ fun ProfileApi(
 fun AccountInfoApi(
     protoViewModelLoginModel: ProtoViewModelLoginModel,
     progress: MutableState<Boolean>,
-    accountInfoResponseModel: MutableList<AccountInfoResponseModelItem>,
+    accountInfoResponseModel: MutableState<AccountInfoResponseModel>,
     isFailureOccurred : MutableState<Boolean>,
     valueUpdateStatus: ValueUpdateStatus
 ) {
@@ -149,11 +151,12 @@ fun AccountInfoApi(
                     val response = String(byteArray)
                     if (httpsStatusCode == 200) {
                         val responseModel =
-                            Gson().fromJson(response, AccountInfoResponseModel::class.java)
-                        accountInfoResponseModel.clear()
-                        responseModel.forEach { data ->
-                            accountInfoResponseModel.add(data)
-                        }
+                            Gson().fromJson(response, AccountInfoResponseModelApi::class.java)
+                        accountInfoResponseModel.value.accountInfo.clear()
+//                        responseModel.accountInfo.forEach() { data ->
+//                            accountInfoResponseModel.value.accountInfo.add(data)
+//                        }
+                        accountInfoResponseModel.value.accountInfo.addAll(responseModel)
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
                         val responseModel =

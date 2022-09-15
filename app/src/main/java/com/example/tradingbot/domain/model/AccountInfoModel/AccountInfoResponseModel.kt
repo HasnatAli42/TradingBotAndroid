@@ -1,3 +1,8 @@
 package com.example.tradingbot.domain.model.AccountInfoModel
 
-class AccountInfoResponseModel : ArrayList<AccountInfoResponseModelItem>()
+data class AccountInfoResponseModel(
+    val accountInfo : ArrayList<AccountInfoResponseModelItem>
+)
+
+class AccountInfoResponseModelApi : ArrayList<AccountInfoResponseModelItem>()
+
