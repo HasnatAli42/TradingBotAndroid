@@ -54,6 +54,8 @@ const val tradingBot = "Smart Trader"
 const val loginUrl = "login/"
 const val profileUrl = "profile/"
 const val accountInfoUrl = "account_info/"
+const val tradeHistoryUrl = "trade_history/"
+
 
 const val powerOff = "Do you want to close trading bot?"
 const val yes = "Yes"

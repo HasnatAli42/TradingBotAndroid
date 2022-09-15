@@ -18,6 +18,8 @@ import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseM
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
+import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
+import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
 import com.example.tradingbot.domain.model.errorModel.ErrorModel
 import com.example.tradingbot.presentation.main.MainActivity
 import com.example.tradingbot.ui.theme.*
@@ -44,16 +46,16 @@ fun LoginApi(
     val request = loginCronet()
     protoViewModelLoginModel.tokenLiveData.observe(context) {
         progress.value = true
-        var json = Gson().toJson(param)
+        val json = Gson().toJson(param)
         request.sendParametersOnlyRequest(
             loginUrl,
             json,
             object : ApiCallBack {
                 override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
                     progress.value = false
-                    var response = String(byteArray)
+                    val response = String(byteArray)
                     if(httpsStatusCode == 200){
-                        var responseModel =
+                        val responseModel =
                             Gson().fromJson(response, LoginResponseModel::class.java)
                         if (responseModel.msg == "Login Success" && httpsStatusCode == 200) {
                             displayErrorMsg(context, responseModel.msg.toString())
@@ -69,7 +71,7 @@ fun LoginApi(
                             valueUpdateStatus.valueUpdateSuccessful()
                         }
                     } else {
-                        var responseModel =
+                        val responseModel =
                             Gson().fromJson(response, ErrorModel::class.java)
                         displayErrorMsg(context, responseModel.errors.non_field_errors.toString())
                     }
@@ -103,14 +105,14 @@ fun ProfileApi(
             object : ApiCallBack {
                 override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
                     progress.value = false
-                    var response = String(byteArray)
+                    val response = String(byteArray)
                     if (httpsStatusCode == 200) {
-                        var responseModel =
+                        val responseModel =
                             Gson().fromJson(response, ProfileResponseModel::class.java)
                         profileResponseModel.value = responseModel
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
-                        var responseModel =
+                        val responseModel =
                             Gson().fromJson(response, ErrorModel::class.java)
                         displayErrorMsg(context, responseModel.errors.detail.toString())
                     }
@@ -144,9 +146,9 @@ fun AccountInfoApi(
             object : ApiCallBack {
                 override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
                     progress.value = false
-                    var response = String(byteArray)
+                    val response = String(byteArray)
                     if (httpsStatusCode == 200) {
-                        var responseModel =
+                        val responseModel =
                             Gson().fromJson(response, AccountInfoResponseModel::class.java)
                         accountInfoResponseModel.clear()
                         responseModel.forEach { data ->
@@ -154,7 +156,7 @@ fun AccountInfoApi(
                         }
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
-                        var responseModel =
+                        val responseModel =
                             Gson().fromJson(response, ErrorModel::class.java)
                         displayErrorMsg(context, responseModel.errors.detail.toString())
                     }
@@ -168,7 +170,47 @@ fun AccountInfoApi(
     }
 }
 
-
+@Composable
+fun TradeHistoryApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    tradeHistoryResponseModel: MutableList<TradeHistoryResponseModelItem>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            tradeHistoryUrl,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        val responseModel =
+                            Gson().fromJson(response, TradeHistoryResponseModel::class.java)
+                        tradeHistoryResponseModel.clear()
+                        responseModel.forEach { data ->
+                            tradeHistoryResponseModel.add(data)
+                        }
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
 
 
 fun displayErrorMsg(context: Context,errorMsg:String){
