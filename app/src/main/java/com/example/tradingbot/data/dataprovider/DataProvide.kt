@@ -1,8 +1,49 @@
 package com.example.tradingbot.data.dataprovider
 
-//import com.example.tradingbot.R
-//import com.example.tradingbot.domain.model.addSocialProfile.SocialProfile
-//import com.example.tradingbot.domain.model.others.InboxMsgClass
+import com.example.tradingbot.R
+
+
+
+val Symbol_List = listOf<String>(
+    "1000LUNCBUSD",
+    "1000SHIBBUSD",
+    "ADABUSD",
+    "ANCBUSD",
+    "APEBUSD",
+    "AUCTIONBUSD",
+    "AVAXBUSD",
+    "BNBBUSD",
+    "BTCBUSD",
+    "CVXBUSD",
+    "DODOBUSD",
+    "DOGEBUSD",
+    "DOTBUSD",
+    "ETCBUSD",
+    "ETHBUSD",
+    "FILBUSD",
+    "FTMBUSD",
+    "FTTBUSD",
+    "GALABUSD",
+    "GALBUSD",
+    "GMTBUSD",
+    "ICPBUSD",
+    "LDOBUSD",
+    "LEVERBUSD",
+    "LINKBUSD",
+    "LTCBUSD",
+    "LUNA2BUSD",
+    "MATICBUSD",
+    "NEARBUSD",
+    "SANDBUSD",
+    "SOLBUSD",
+    "TLMBUSD",
+    "TRXBUSD",
+    "UNIBUSD",
+    "WAVESBUSD",
+    "XRPBUSD"
+)
+
+
 
 //object DataProvider {
 //

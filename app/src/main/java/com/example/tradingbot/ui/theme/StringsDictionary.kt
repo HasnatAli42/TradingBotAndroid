@@ -56,6 +56,7 @@ const val profileUrl = "profile/"
 const val accountInfoUrl = "account_info/"
 const val tradeHistoryUrl = "trade_history/"
 const val orderHistoryUrl = "order_history/"
+const val openOrdersUrl = "open_orders/"
 
 const val powerOff = "Do you want to close trading bot?"
 const val yes = "Yes"

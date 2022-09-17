@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
+import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
+import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
@@ -23,6 +25,8 @@ import com.example.tradingbot.domain.use_cases.restapi.*
 import com.example.tradingbot.presentation.app.HomeBottomBar
 import com.example.tradingbot.presentation.app.HomeTopBar
 import com.example.tradingbot.presentation.home.screencomponents.HomeScreen
+import com.example.tradingbot.presentation.home.screencomponents.OpenOrdersScreen
+import com.example.tradingbot.presentation.home.screencomponents.OrderHistoryScreen
 import com.example.tradingbot.presentation.home.screencomponents.TradeHistoryScreen
 import com.example.tradingbot.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +58,8 @@ class HomeActivity : ComponentActivity() {
 //                Data Providers
                 val accountInfoResponseModel = remember { mutableStateOf(AccountInfoResponseModel(accountInfo = arrayListOf())) }
                 val tradeHistoryResponseModel = remember { mutableStateOf(TradeHistoryResponseModel(tradeHistory = arrayListOf())) }
+                val orderHistoryResponseModel = remember { mutableStateOf(OrderHistoryResponseModel(orderHistory = arrayListOf())) }
+                val openOrdersResponseModel = remember { mutableStateOf(OpenOrderResponseModel(openOrders = arrayListOf())) }
 
                 if (isInitiated.value){
                     isInitiated.value = false
@@ -96,7 +102,12 @@ class HomeActivity : ComponentActivity() {
                                 accountInfoResponseModel = accountInfoResponseModel,
                             )
                         }else if (orderButton.value){
-                            Text(text = "Order Screen")
+                            OpenOrdersScreen(
+                                protoViewModelLoginModel = protoViewModelLoginModel,
+                                progress = progress,
+                                isFailureOccurred = isFailureOccurred,
+                                openOrdersResponseModel = openOrdersResponseModel
+                            )
                         }else if (positionButton.value){
                             Text(text = "Position Screen")
                         }else if (tradeHistoryButton.value){
@@ -108,7 +119,12 @@ class HomeActivity : ComponentActivity() {
                                 tradeHistoryResponseModel = tradeHistoryResponseModel
                             )
                         }else if (orderHistoryButton.value) {
-                            Text(text = "Order History Screen")
+                            OrderHistoryScreen(
+                                protoViewModelLoginModel = protoViewModelLoginModel,
+                                progress = progress,
+                                isFailureOccurred = isFailureOccurred,
+                                orderHistoryResponseModel = orderHistoryResponseModel
+                            )
                         }
                     }
 

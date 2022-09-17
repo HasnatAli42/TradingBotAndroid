@@ -19,6 +19,8 @@ import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseM
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
+import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
+import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModelApi
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModelApi
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
@@ -260,6 +262,48 @@ fun OrderHistoryApi(
     }
 }
 
+
+@Composable
+fun OpenOrdersApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    openOrdersResponseModel: MutableState<OpenOrderResponseModel>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            openOrdersUrl,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        val responseModel =
+                            Gson().fromJson(response, OpenOrderResponseModelApi::class.java)
+                        openOrdersResponseModel.value.openOrders.clear()
+                        if (responseModel.size > 0){
+                            openOrdersResponseModel.value.openOrders.addAll(responseModel)
+                        }
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
 
 fun displayErrorMsg(context: Context,errorMsg:String){
     runOnUiThread {

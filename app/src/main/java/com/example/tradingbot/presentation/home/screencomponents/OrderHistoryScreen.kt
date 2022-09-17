@@ -3,8 +3,9 @@ package com.example.tradingbot.presentation.home.screencomponents
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -14,28 +15,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
-import com.example.tradingbot.domain.functions.time.getDateTime
+import com.example.tradingbot.data.dataprovider.Symbol_List
 import com.example.tradingbot.domain.functions.time.getDateTimeChangeFormat
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
-import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
 import com.example.tradingbot.domain.use_cases.restapi.OrderHistoryApi
-import com.example.tradingbot.domain.use_cases.restapi.TradeHistoryApi
 import com.example.tradingbot.domain.use_cases.restapi.ValueUpdateStatus
-import com.example.tradingbot.presentation.home.components.TradeHistoryCardView
+import com.example.tradingbot.presentation.home.components.OrderHistoryCardView
+import com.example.tradingbot.presentation.main.components.SetMutableFalseButton
+import com.example.tradingbot.ui.theme.bluecolor
 
 @Composable
 fun OrderHistoryScreen(
     protoViewModelLoginModel: ProtoViewModelLoginModel,
     progress: MutableState<Boolean>,
     isFailureOccurred : MutableState<Boolean>,
-    symbol : MutableState<String>,
     orderHistoryResponseModel: MutableState<OrderHistoryResponseModel>,
 ){
-    val refresh = remember { mutableStateOf(true) }
+    val isApiCalled = remember { mutableStateOf(false) }
+    val isApiCalledFirstTime = remember { mutableStateOf(false) }
+    val symbol = remember { mutableStateOf("") }
     val orderHistoryResponseModelLocal = remember { mutableStateOf(OrderHistoryResponseModel(orderHistory = arrayListOf())) }
 
-    if (refresh.value){
-        refresh.value = false
+
+    if (isApiCalled.value && isApiCalledFirstTime.value){
+        isApiCalledFirstTime.value = false
         OrderHistoryApi(
             protoViewModelLoginModel = protoViewModelLoginModel,
             progress = progress,
@@ -68,18 +71,52 @@ fun OrderHistoryScreen(
             .verticalScroll(rememberScrollState())
     )
     {
-        if (orderHistoryResponseModel.value.orderHistory.size > 0) {
-            orderHistoryResponseModel.value.orderHistory.forEach { data ->
-                Spacer(modifier = Modifier.padding(top = 5.dp))
-//                TradeHistoryCardView(Data = data, refresh = refresh, profileName = profileName)
-                Spacer(modifier = Modifier.padding(top = 5.dp))
+        if (isApiCalled.value){
+            if (orderHistoryResponseModel.value.orderHistory.size > 0 && !progress.value) {
+                orderHistoryResponseModel.value.orderHistory.forEach { data ->
+                    Spacer(modifier = Modifier.padding(top = 5.dp))
+                    OrderHistoryCardView(Data = data)
+                    Spacer(modifier = Modifier.padding(top = 5.dp))
+                }
+                Spacer(modifier = Modifier.padding(top = 10.dp))
+                SetMutableFalseButton(mutableState = isApiCalled, text = "Go Back")
             }
-        }
             else {
-            Text(text = "No Record Found" , color = Color.Gray)
+                if (!progress.value){
+                    Text(text = "No Record Found" , color = Color.Gray)
+                    Spacer(modifier = Modifier.padding(top = 10.dp))
+                    SetMutableFalseButton(mutableState = isApiCalled, text = "Go Back")
+                }
             }
+        }else{
+
+            Symbol_List.forEach { current_symbol ->
+
+                Button(
+                    onClick = {
+                        symbol.value = current_symbol
+                        isApiCalled.value = true
+                        isApiCalledFirstTime.value = true
+
+                    },
+
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = bluecolor,
+                        contentColor = Color.White
+                    ),
+
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .padding(start = 40.dp, end = 40.dp, top = 5.dp, bottom = 5.dp)) {
+                    Text(text = current_symbol)
+                }
+            }
+
+
+        }
+
 
         }
     }
 
-}
+

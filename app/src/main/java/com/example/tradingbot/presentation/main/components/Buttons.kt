@@ -30,3 +30,24 @@ fun ScreenShiftButton(
         Text(text = text)
     }
 }
+
+@Composable
+fun SetMutableFalseButton(
+    mutableState: MutableState<Boolean>,
+    text: String
+) {
+    Button(
+        onClick = {
+            mutableState.value = false
+
+        },
+
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = bluecolor,
+            contentColor = Color.White
+        ),
+
+        ) {
+        Text(text = text)
+    }
+}

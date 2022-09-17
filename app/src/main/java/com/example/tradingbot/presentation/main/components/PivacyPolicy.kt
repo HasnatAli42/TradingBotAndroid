@@ -34,14 +34,14 @@ fun TermsOfUseAndPrivacyPolicy() {
             style = MaterialTheme.typography.body2,
             modifier = Modifier
                 .clickable(onClick = {
-                    val url = "https://www.fantextapp.com/terms"
+                    val url = "https://mytradingbot.netlify.app/terms"
                     val i = Intent(Intent.ACTION_VIEW)
                     i.data = Uri.parse(url)
                     context.startActivity(i)
                 })
         )
 
-        Row() {
+        Row(modifier = Modifier.padding(top=10.dp)) {
             Text("Have questions?",
                 color = Color.White,
                 fontSize = 18.sp,
@@ -52,10 +52,10 @@ fun TermsOfUseAndPrivacyPolicy() {
             Text("Contact Us",
                 color = Color.White,
                 fontSize = 18.sp,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.body2,
                 modifier = Modifier
                     .padding(start = 20.dp)
-                    .clickable { composeEmail(arrayOf("hasnatali42@gmail.com"), "", context) })
+                    .clickable { composeEmail(arrayOf("tradingbot.developers@gmail.com"), "", context) })
         }
 
     }
