@@ -15,3 +15,14 @@ fun getDateTime(s: Long): String? {
         e.toString()
     }
 }
+
+fun getDateTimeChangeFormat(s: String): String? {
+    return try {
+        val foundSDF = SimpleDateFormat("dd-MM-yyyy, hh:mm:ss")
+        val convertedSFD = SimpleDateFormat("dd-MM-yyyy hh:mm a")
+        val netDate = foundSDF.parse(s)
+        convertedSFD.format(netDate)
+    } catch (e: Exception) {
+        e.toString()
+    }
+}

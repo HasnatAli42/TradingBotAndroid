@@ -19,6 +19,8 @@ import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseM
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
+import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
+import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModelApi
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelApi
@@ -154,10 +156,9 @@ fun AccountInfoApi(
                         val responseModel =
                             Gson().fromJson(response, AccountInfoResponseModelApi::class.java)
                         accountInfoResponseModel.value.accountInfo.clear()
-//                        responseModel.accountInfo.forEach() { data ->
-//                            accountInfoResponseModel.value.accountInfo.add(data)
-//                        }
-                        accountInfoResponseModel.value.accountInfo.addAll(responseModel)
+                        if (responseModel.size > 0) {
+                            accountInfoResponseModel.value.accountInfo.addAll(responseModel)
+                        }
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
                         val responseModel =
@@ -197,7 +198,52 @@ fun TradeHistoryApi(
                         val responseModel =
                             Gson().fromJson(response, TradeHistoryResponseModelApi::class.java)
                         tradeHistoryResponseModel.value.tradeHistory.clear()
+                        if (responseModel.size > 0) {
                             tradeHistoryResponseModel.value.tradeHistory.addAll(responseModel)
+                        }
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
+@Composable
+fun OrderHistoryApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    orderHistoryResponseModel: MutableState<OrderHistoryResponseModel>,
+    Symbol : String,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            "$orderHistoryUrl$Symbol/",
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        val responseModel =
+                            Gson().fromJson(response, OrderHistoryResponseModelApi::class.java)
+                        orderHistoryResponseModel.value.orderHistory.clear()
+                        if (responseModel.size > 0){
+                            orderHistoryResponseModel.value.orderHistory.addAll(responseModel)
+                        }
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
                         val responseModel =
