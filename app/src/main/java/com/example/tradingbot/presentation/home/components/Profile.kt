@@ -13,15 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.tradingbot.R
 import com.example.tradingbot.ui.theme.imgUrl
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ProfilePicture(avatar: MutableState<String>) {
     if (avatar.value != "") {
         Image(
-            painter = rememberImagePainter("$imgUrl${avatar.value}"),
+            painter = rememberImagePainter(avatar.value),
             contentDescription = "Profile Picture",
             contentScale = ContentScale.Crop,
             modifier = Modifier

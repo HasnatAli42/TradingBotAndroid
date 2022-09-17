@@ -5,10 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,10 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import com.example.tradingbot.R
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.use_cases.restapi.CustomProgressBar
 import com.example.tradingbot.domain.use_cases.restapi.CustomWarningAlertWithRetry
@@ -61,12 +66,10 @@ class MainActivity : ComponentActivity() {
                     if(!isLandingPageOpen.value){
                         MainTopBar(iconExpanded = isAppPowerOffCalled)
                     }else{
-                        Text(
-                            text = tradingBot,
-                            fontFamily = RobotoCondensed,
-                            color = lightGreen,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp
+                        Image(
+                            painter = painterResource(id = R.drawable.bot_name_logo),
+                            contentDescription = "",
+                            Modifier.size(150.dp, 40.dp)
                         )
                     }
                     if (isLandingPageOpen.value){

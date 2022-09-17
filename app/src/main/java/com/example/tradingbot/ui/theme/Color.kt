@@ -24,7 +24,7 @@ val colorOn = Color(0xFF39D3B0)
 val colorOff = Color(0xFFFFFFFF)
 val Green = Color(0xFF00FF00)
 val Red = Color(0xFFFF0000)
-val Yellow = Color(0xFFFFFF00)
+val Yellow = Color(0xFFE8FF02)
 
 
 val a = Gradientblue
@@ -32,3 +32,14 @@ val b = Gradientpurple
 val gradientGrayblack = Brush.verticalGradient(0f to a, 1000f to b)
 val gradientBlackGray = Brush.verticalGradient(0f to b, 1000f to a)
 val gradientGreenWhite = Brush.verticalGradient(0f to lightGreen, 1000f to VeryLightGrey)
+
+val BlueCard=Color(0xFFcfe7f3)
+val BlueText=Color(0xFF00587c)
+val MaroonText=Color(0xFFA74753)
+val YellowText=Color(0xFFe58b00)
+val LightGreenCard=Color(0xFFD7F0DD)
+val GreenText=Color(0xFF009d26)
+val PintCard=Color(0xFFFBE7C6)
+val PurpleCard=Color(0xFFF0DBFA)
+val PurpleText=Color(0xFF7300a3)
+val SeaGreenText=Color(0xFF209976)

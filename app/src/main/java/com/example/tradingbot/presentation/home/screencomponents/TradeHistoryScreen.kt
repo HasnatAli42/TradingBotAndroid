@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.functions.time.getDateTime
+import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
@@ -27,25 +28,25 @@ fun TradeHistoryScreen(
     progress: MutableState<Boolean>,
     isFailureOccurred : MutableState<Boolean>,
     profileName : MutableState<String>,
-    tradeHistoryResponseModel: MutableList<TradeHistoryResponseModelItem>,
+    tradeHistoryResponseModel: MutableState<TradeHistoryResponseModel>,
 ){
     val refresh = remember { mutableStateOf(true) }
-    val valueUpdate = remember { mutableStateOf(true) }
+    val tradeHistoryResponseModelLocal = remember { mutableStateOf(TradeHistoryResponseModel(tradeHistory = arrayListOf())) }
 
     if (refresh.value){
         refresh.value = false
         TradeHistoryApi(
             protoViewModelLoginModel = protoViewModelLoginModel,
             progress = progress,
-            tradeHistoryResponseModel = tradeHistoryResponseModel,
+            tradeHistoryResponseModel = tradeHistoryResponseModelLocal,
             isFailureOccurred = isFailureOccurred,
             valueUpdateStatus = object : ValueUpdateStatus {
                 override fun valueUpdateSuccessful() {
-                    tradeHistoryResponseModel.sortByDescending {
+                    tradeHistoryResponseModelLocal.value.tradeHistory.sortByDescending {
                         it.dateTime = getDateTime(it.time)
                         it.time
                     }
-                    valueUpdate.value = true
+                    tradeHistoryResponseModel.value = tradeHistoryResponseModelLocal.value
                 }
 
                 override fun valueUpdateFailure() {
@@ -61,15 +62,14 @@ fun TradeHistoryScreen(
         modifier = Modifier
             .padding(all = 10.dp)
             .fillMaxWidth(1f)
-            .fillMaxHeight(0.9f)
+            .fillMaxHeight(1f)
             .verticalScroll(rememberScrollState())
     )
     {
-        if (valueUpdate.value){
-            tradeHistoryResponseModel.forEach { data ->
+            tradeHistoryResponseModel.value.tradeHistory.forEach { data ->
+                Spacer(modifier = Modifier.padding(top= 5.dp))
                 TradeHistoryCardView(Data = data, refresh = refresh, profileName = profileName)
-                Spacer(modifier = Modifier.padding(top= 10.dp))
-            }
+                Spacer(modifier = Modifier.padding(top= 5.dp))
         }
     }
 

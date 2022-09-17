@@ -25,7 +25,6 @@ fun HomeScreen(
     protoViewModelLoginModel: ProtoViewModelLoginModel,
     progress: MutableState<Boolean>,
     isFailureOccurred : MutableState<Boolean>,
-    valueUpdate : MutableState<Int>,
     profileName : MutableState<String>,
     accountInfoResponseModel : MutableState<AccountInfoResponseModel>,
 ){
@@ -44,11 +43,10 @@ fun HomeScreen(
             isFailureOccurred = isFailureOccurred,
             valueUpdateStatus = object : ValueUpdateStatus{
                 override fun valueUpdateSuccessful() {
-                    accountInfoResponseModel.value = accountInfoResponseModelLocal.value
-                    accountInfoResponseModel.value.accountInfo.sortByDescending {
+                    accountInfoResponseModelLocal.value.accountInfo.sortByDescending {
                         it.walletBalance
                     }
-//                    valueUpdate.value = valueUpdate.value +1
+                    accountInfoResponseModel.value = accountInfoResponseModelLocal.value
                 }
 
                 override fun valueUpdateFailure() {
@@ -64,15 +62,14 @@ fun HomeScreen(
     modifier = Modifier
         .padding(all = 10.dp)
         .fillMaxWidth(1f)
-        .fillMaxHeight(0.9f)
+        .fillMaxHeight(1f)
         .verticalScroll(rememberScrollState())
     )
     {
-//        if (valueUpdate.value >= 0){
             accountInfoResponseModel.value.accountInfo.forEach { data ->
+                Spacer(modifier = Modifier.padding(top= 5.dp))
                 AccountInFoCardView(Data = data, refresh = refresh, profileName = profileName)
-                Spacer(modifier = Modifier.padding(top= 10.dp))
+                Spacer(modifier = Modifier.padding(top= 5.dp))
             }
-//        }
     }
 }

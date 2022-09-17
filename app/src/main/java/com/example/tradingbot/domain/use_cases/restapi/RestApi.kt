@@ -21,6 +21,7 @@ import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
+import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelApi
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
 import com.example.tradingbot.domain.model.errorModel.ErrorModel
 import com.example.tradingbot.presentation.main.MainActivity
@@ -177,7 +178,7 @@ fun AccountInfoApi(
 fun TradeHistoryApi(
     protoViewModelLoginModel: ProtoViewModelLoginModel,
     progress: MutableState<Boolean>,
-    tradeHistoryResponseModel: MutableList<TradeHistoryResponseModelItem>,
+    tradeHistoryResponseModel: MutableState<TradeHistoryResponseModel>,
     isFailureOccurred : MutableState<Boolean>,
     valueUpdateStatus: ValueUpdateStatus
 ) {
@@ -194,11 +195,9 @@ fun TradeHistoryApi(
                     val response = String(byteArray)
                     if (httpsStatusCode == 200) {
                         val responseModel =
-                            Gson().fromJson(response, TradeHistoryResponseModel::class.java)
-                        tradeHistoryResponseModel.clear()
-                        responseModel.forEach { data ->
-                            tradeHistoryResponseModel.add(data)
-                        }
+                            Gson().fromJson(response, TradeHistoryResponseModelApi::class.java)
+                        tradeHistoryResponseModel.value.tradeHistory.clear()
+                            tradeHistoryResponseModel.value.tradeHistory.addAll(responseModel)
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
                         val responseModel =

@@ -8,7 +8,7 @@ import java.util.*
 @SuppressLint("SimpleDateFormat")
 fun getDateTime(s: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm")
+        val sdf = SimpleDateFormat("dd-MM-yyyy hh:mm a")
         val netDate = Date(s)
         sdf.format(netDate)
     } catch (e: Exception) {

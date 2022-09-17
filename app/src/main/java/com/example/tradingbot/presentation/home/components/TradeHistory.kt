@@ -17,14 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tradingbot.R
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
-import com.example.tradingbot.ui.theme.Green
-import com.example.tradingbot.ui.theme.Red
-import com.example.tradingbot.ui.theme.YellowishRed
+import com.example.tradingbot.ui.theme.*
 
 @Composable
 fun TradeHistoryCardView(
@@ -37,12 +36,13 @@ fun TradeHistoryCardView(
     Card(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .background(color = Color.White, shape = RoundedCornerShape(15.dp))
+            .background(color = PurpleCard, shape = RoundedCornerShape(15.dp))
         ,
         shape = RoundedCornerShape(15.dp)
     )
     {
-        Column(modifier = Modifier.fillMaxWidth(1f)) {
+        Column(modifier = Modifier.fillMaxWidth(1f)
+            .background(color = PurpleCard)) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top,
@@ -53,11 +53,13 @@ fun TradeHistoryCardView(
                 Text(
                     "SYMBOL : ${Data.symbol}",
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 10.dp)
                 )
                 Text(
                     "${Data.dateTime}",
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 10.dp)
                 )
 
@@ -77,7 +79,7 @@ fun TradeHistoryCardView(
                 {
                     Text(
                         "Side :",
-                        color = Color.Black,
+                        color = PurpleText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -95,7 +97,7 @@ fun TradeHistoryCardView(
                 {
                     Text(
                         "Price :",
-                        color = Color.Black,
+                        color = PurpleText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -119,7 +121,7 @@ fun TradeHistoryCardView(
                 {
                     Text(
                         "Asset :",
-                        color = Color.Black,
+                        color = PurpleText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -137,7 +139,7 @@ fun TradeHistoryCardView(
                 {
                     Text(
                         "Quantity :",
-                        color = Color.Black,
+                        color = PurpleText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -162,7 +164,7 @@ fun TradeHistoryCardView(
                 {
                     Text(
                         "Fee :",
-                        color = Color.Black,
+                        color = PurpleText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -180,7 +182,7 @@ fun TradeHistoryCardView(
                 {
                     Text(
                         "Order Type :",
-                        color = Color.Black,
+                        color = PurpleText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -200,7 +202,7 @@ fun determineSideColor (s : String): Color{
     return if (s == "SELL"){
         Red
     }else{
-        Green
+        GreenText
     }
 
 }
@@ -216,7 +218,7 @@ fun determineType (s : Boolean): String{
 
 fun determineTypeColor (s : Boolean): Color{
     return if (s){
-        Green
+        GreenText
     }else{
         Color.Gray
     }

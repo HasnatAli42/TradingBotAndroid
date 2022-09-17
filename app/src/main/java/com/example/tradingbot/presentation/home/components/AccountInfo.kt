@@ -19,14 +19,12 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tradingbot.R
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
-import com.example.tradingbot.ui.theme.Green
-import com.example.tradingbot.ui.theme.Red
-import com.example.tradingbot.ui.theme.Yellow
-import com.example.tradingbot.ui.theme.YellowishRed
+import com.example.tradingbot.ui.theme.*
 import org.chromium.base.Log
 import kotlin.math.roundToLong
 
@@ -41,12 +39,13 @@ refresh : MutableState<Boolean>,
     Card(
         modifier = Modifier
             .fillMaxWidth(1f)
-            .background(color = Color.White, shape = RoundedCornerShape(15.dp))
+            .background(color = BlueCard, shape = RoundedCornerShape(15.dp))
             ,
         shape = RoundedCornerShape(15.dp)
     )
     {
-        Column(modifier = Modifier.fillMaxWidth(1f)) {
+        Column(modifier = Modifier.fillMaxWidth(1f)
+            .background(color = BlueCard)) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top,
@@ -57,6 +56,7 @@ refresh : MutableState<Boolean>,
                 Text(
                     "${profileName.value}'s Futures Wallet ${Data.asset}",
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 10.dp)
                 )
                 IconButton(modifier = Modifier.size(40.dp), onClick = {
@@ -92,7 +92,7 @@ refresh : MutableState<Boolean>,
                         modifier = Modifier
                             .size(50.dp)
                             .clip(CircleShape)
-                            .background(color = Color.White)
+                            .background(color = Color.Black)
                     )
 
                 Text(Data.asset, fontSize = 24.sp)
@@ -110,8 +110,8 @@ refresh : MutableState<Boolean>,
 
                 {
                     Text(
-                        "Wallet Balance :",
-                        color = Color.Black,
+                        "Wallet :",
+                        color = BlueText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -128,8 +128,8 @@ refresh : MutableState<Boolean>,
 
                 {
                     Text(
-                        "Margin Balance :",
-                        color = Color.Black,
+                        "Margin :",
+                        color = BlueText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -152,8 +152,8 @@ refresh : MutableState<Boolean>,
 
                 {
                     Text(
-                        "UnTraded Balance :",
-                        color = Color.Black,
+                        "UnTraded :",
+                        color = BlueText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -170,13 +170,13 @@ refresh : MutableState<Boolean>,
 
                 {
                     Text(
-                        "Traded Balance :",
-                        color = Color.Black,
+                        "Traded :",
+                        color = BlueText,
                         fontSize = 14.sp
                     )
                     Text(
                         Data.positionInitialMargin.dropLast(4),
-                        color = YellowishRed,
+                        color = YellowText,
                         fontSize = 14.sp
                     )
                 }
@@ -196,7 +196,7 @@ refresh : MutableState<Boolean>,
                 {
                     Text(
                         "Initial Margin :",
-                        color = Color.Black,
+                        color = BlueText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -214,7 +214,7 @@ refresh : MutableState<Boolean>,
                 {
                     Text(
                         "UnRealized PNL :",
-                        color = Color.Black,
+                        color = BlueText,
                         fontSize = 14.sp
                     )
                     Text(
@@ -234,10 +234,10 @@ refresh : MutableState<Boolean>,
 fun determineColor(value : String) : Color{
     var floatValue = value.toFloat()
     return if (floatValue > 0){
-        Green
+        GreenText
     }else if (floatValue < 0){
         Red
     }else {
-        YellowishRed
+        Yellow
     }
 }

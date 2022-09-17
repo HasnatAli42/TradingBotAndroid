@@ -17,6 +17,7 @@ import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
+import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
 import com.example.tradingbot.domain.use_cases.restapi.*
 import com.example.tradingbot.presentation.app.HomeBottomBar
@@ -33,15 +34,14 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TradingBotHomeTheme {
-                val profileData = remember { mutableStateOf(ProfileResponseModel(email = "",first_name="",last_name="",id=0,image_url="")) }
+                val profileData = remember { mutableStateOf(ProfileResponseModel(email = "",first_name="",last_name="",id=0,drive_image_url="")) }
                 val isInitiated = remember { mutableStateOf(true) }
 
                 val progress = remember { mutableStateOf(false) }
                 val isLogoutCalled = remember { mutableStateOf(false) }
                 val isFailureOccurred = remember { mutableStateOf(false) }
                 val profileName = remember { mutableStateOf(profileData.value.first_name) }
-                val profileImg = remember { mutableStateOf(profileData.value.image_url) }
-                val valueUpdate = remember { mutableStateOf(0) }
+                val profileImg = remember { mutableStateOf(profileData.value.drive_image_url) }
 
 //                TabsButtonStart
                 val homeButton = remember { mutableStateOf(true) }
@@ -53,7 +53,7 @@ class HomeActivity : ComponentActivity() {
 
 //                Data Providers
                 val accountInfoResponseModel = remember { mutableStateOf(AccountInfoResponseModel(accountInfo = arrayListOf())) }
-                val tradeHistoryResponseModel = remember { mutableListOf<TradeHistoryResponseModelItem>() }
+                val tradeHistoryResponseModel = remember { mutableStateOf(TradeHistoryResponseModel(tradeHistory = arrayListOf())) }
 
                 if (isInitiated.value){
                     isInitiated.value = false
@@ -65,7 +65,7 @@ class HomeActivity : ComponentActivity() {
                         valueUpdateStatus = object : ValueUpdateStatus{
                             override fun valueUpdateSuccessful() {
                                 profileName.value = profileData.value.first_name
-                                profileImg.value = profileData.value.image_url
+                                profileImg.value = profileData.value.drive_image_url
                             }
 
                             override fun valueUpdateFailure() {
@@ -92,7 +92,6 @@ class HomeActivity : ComponentActivity() {
                                 protoViewModelLoginModel = protoViewModelLoginModel,
                                 progress = progress,
                                 isFailureOccurred = isFailureOccurred,
-                                valueUpdate =valueUpdate,
                                 profileName = profileName,
                                 accountInfoResponseModel = accountInfoResponseModel,
                             )

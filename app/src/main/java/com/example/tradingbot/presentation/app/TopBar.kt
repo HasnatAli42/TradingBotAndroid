@@ -44,14 +44,11 @@ fun MainTopBar(iconExpanded: MutableState<Boolean>) {
                 contentDescription = "",
                 Modifier.size(40.dp, 40.dp)
             )
-            Text(
-                text = tradingBot,
-                fontFamily = RobotoCondensed,
-                color = lightGreen,
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp
+            Image(
+                painter = painterResource(id = R.drawable.bot_name_logo),
+                contentDescription = "",
+                Modifier.size(150.dp, 40.dp)
             )
-
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_power_settings_new_24),
                 contentDescription = "",
@@ -85,7 +82,11 @@ fun HomeTopBar(profileName : MutableState<String>, profileImage : MutableState<S
                     Modifier.size(30.dp, 30.dp)
                 )
                 Spacer(Modifier.padding(start = 5.dp))
-                Text(text = tradingBot, fontFamily = RobotoCondensed, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                Image(
+                    painter = painterResource(id = R.drawable.bot_name_logo),
+                    contentDescription = "",
+                    Modifier.size(150.dp, 40.dp)
+                )
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {

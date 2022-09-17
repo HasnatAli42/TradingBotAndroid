@@ -4,6 +4,6 @@ data class ProfileResponseModel(
     val email: String,
     val first_name: String,
     val id: Int,
-    val image_url: String,
+    val drive_image_url: String,
     val last_name: String
 )
