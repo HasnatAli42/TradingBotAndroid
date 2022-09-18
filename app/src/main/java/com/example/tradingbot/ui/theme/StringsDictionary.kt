@@ -32,6 +32,7 @@ val back = "Back"
 val sign_in = "Sign In"
 val email_address = "Email Address"
 val pass = "Password"
+val ConfirmPass = "Confirm Password"
 val validity_check = "Email or Password Invalid"
 
 //      Sign_UP page strings
@@ -49,10 +50,26 @@ val pass_confirm = "Confirm your Password"
 val Forget_your_Passwor = "Did you Forget your Password?"
 val Forget_your_Passwor_Disc = "A Password Reset link will be sent to your given email address." +
         "Follow the link to create new password and login to Trading Bot with your new password"
+val app_logo = "App Logo"
+val next="Next"
+
+// OTP Verification
+
+val confirm="Confirm"
+val OTP="OTP"
+val otp_description="Please enter the 8 digits code sent on your registered email address. "
+val Verify_email="Verify Your Email Address"
+val pass_reset_icon="pass_reset_icon"
+val otp_not_Received="Haven't received OTP ?  Please go back and try again. "
+val send_otp="Send OTP"
+val new_pass="New Password"
 
 const val tradingBot = "Smart Trader"
 const val loginUrl = "login/"
+const val signUpUrl = "register/"
 const val profileUrl = "profile/"
+const val forgotPassUrl = "forgot_password/"
+const val passwordResetUrl = "password_reset/"
 const val accountInfoUrl = "account_info/"
 const val tradeHistoryUrl = "trade_history/"
 const val orderHistoryUrl = "order_history/"

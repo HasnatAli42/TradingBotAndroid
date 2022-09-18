@@ -67,7 +67,7 @@ fun OpenTradesScreen(
                 Spacer(modifier = Modifier.padding(top= 5.dp))
             }
         } else {
-            if (!progress.value){
+            if (!refresh.value){
                 Text(text = "Opps, No Open Trades Found", color = Color.Gray)
             }
         }

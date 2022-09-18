@@ -172,7 +172,8 @@ fun SignInPage(
                             isSignInPageOpen.value = false
                             isForgetPasswordPageOpen.value = true
                         },
-                        color = Color.Black
+                        color = Color.Black,
+                        style = MaterialTheme.typography.body2,
 
                     )
 
@@ -192,7 +193,8 @@ fun SignInPage(
                             isSignInPageOpen.value = false
                             isSignUpPageOpen.value = true
                         },
-                        color = Color.Black
+                        color = Color.Black,
+                        style = MaterialTheme.typography.body2,
                     )
                 }
 

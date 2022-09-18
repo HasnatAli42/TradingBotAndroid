@@ -26,10 +26,13 @@ import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesRes
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModelApi
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
+import com.example.tradingbot.domain.model.SignUpModel.SignUpRequestModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelApi
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
 import com.example.tradingbot.domain.model.errorModel.ErrorModel
+import com.example.tradingbot.domain.model.resetPasswordModel.ResetPasswordResponseModel
+import com.example.tradingbot.domain.model.resetPasswordModel.ResetPaswordRequestModel
 import com.example.tradingbot.presentation.main.MainActivity
 import com.example.tradingbot.ui.theme.*
 import com.google.gson.Gson
@@ -94,6 +97,158 @@ fun LoginApi(
             })
     }
 }
+
+@Composable
+fun SignUpApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    email: String,
+    password: String,
+    password2: String,
+    firstName : String,
+    lastName : String,
+    api_Key : String,
+    secret_key : String,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus,
+    intent: Intent,
+) {
+    val param = SignUpRequestModel(email = email,password= password, password2 =password2, first_name = firstName, last_name = lastName, api_key = api_Key, secret_key = secret_key )
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        val json = Gson().toJson(param)
+        request.sendParametersOnlyRequest(
+            signUpUrl,
+            json,
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if(httpsStatusCode == 200){
+                        val responseModel =
+                            Gson().fromJson(response, LoginResponseModel::class.java)
+                        if (responseModel.msg == "Registration Successful" && httpsStatusCode == 200) {
+                            protoViewModelLoginModel.updateValueLogin(
+                                email,
+                                password
+                            )
+                            protoViewModelLoginModel.updateValueSecurityToken(
+                                responseModel.token.access,
+                                false
+                            )
+                            intent.putExtra("parsedResponse", responseModel)
+                            valueUpdateStatus.valueUpdateSuccessful()
+                        }
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        if (!responseModel.errors.non_field_errors.isNullOrEmpty()){
+                            displayErrorMsg(context, responseModel.errors.non_field_errors.toString())
+                        }
+                        if (!responseModel.errors.email.isNullOrEmpty()){
+                            displayErrorMsg(context, responseModel.errors.email.toString())
+                        }
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
+@Composable
+fun ForgetPasswordApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    email: String,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus,
+) {
+     val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        val json = Gson().toJson("")
+        request.sendParametersOnlyRequest(
+            "$forgotPassUrl${email}/",
+            json,
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if(httpsStatusCode == 200){
+                        val responseModel =
+                            Gson().fromJson(response, ResetPasswordResponseModel::class.java)
+                        if (responseModel.msg == "Email Send successfully" && httpsStatusCode == 200) {
+                            displayErrorMsg(context, responseModel.msg.toString())
+                            valueUpdateStatus.valueUpdateSuccessful()
+                        }
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
+
+@Composable
+fun ResetPasswordApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    password: String,
+    password2: String,
+    otp: String,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus,
+) {
+    val param = ResetPaswordRequestModel(password= password, password2 =password2 )
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        val json = Gson().toJson(param)
+        request.sendParametersOnlyRequest(
+            "$passwordResetUrl${otp}/",
+            json,
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if(httpsStatusCode == 200){
+                        val responseModel =
+                            Gson().fromJson(response, ResetPasswordResponseModel::class.java)
+                        if (responseModel.msg == "Password Reset Successfully" && httpsStatusCode == 200) {
+                            displayErrorMsg(context, responseModel.msg.toString())
+                            valueUpdateStatus.valueUpdateSuccessful()
+                        }
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
 
 
 @Composable
@@ -352,14 +507,15 @@ fun OpenTradesApi(
 }
 
 fun displayErrorMsg(context: Context,errorMsg:String){
-    runOnUiThread {
-        Toast.makeText(
-            context,
-            errorMsg,
-            Toast.LENGTH_LONG
-        ).show()
+    if (!errorMsg.isNullOrEmpty()){
+        runOnUiThread {
+            Toast.makeText(
+                context,
+                errorMsg,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
-
 }
 
 

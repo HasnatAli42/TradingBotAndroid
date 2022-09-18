@@ -38,6 +38,7 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TradingBotHomeTheme {
+                val context = LocalContext.current as ComponentActivity
                 val profileData = remember { mutableStateOf(ProfileResponseModel(email = "",first_name="",last_name="",id=0,drive_image_url="")) }
                 val isInitiated = remember { mutableStateOf(true) }
 
@@ -74,6 +75,7 @@ class HomeActivity : ComponentActivity() {
                             override fun valueUpdateSuccessful() {
                                 profileName.value = profileData.value.first_name
                                 profileImg.value = profileData.value.drive_image_url
+                                displayErrorMsg(context, "Welcome ${profileData.value.first_name} ${profileData.value.last_name}")
                             }
 
                             override fun valueUpdateFailure() {
@@ -167,7 +169,6 @@ class HomeActivity : ComponentActivity() {
                     )
                 }
                 if (isLogoutCalled.value){
-                    val context = LocalContext.current as ComponentActivity
                     val intent = Intent(context, MainActivity::class.java)
                     context.finish()
                     context!!.startActivity(intent)

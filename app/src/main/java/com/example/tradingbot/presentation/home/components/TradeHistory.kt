@@ -22,8 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tradingbot.R
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
+import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesResponseModelItem
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
 import com.example.tradingbot.ui.theme.*
+import kotlin.math.roundToInt
 
 @Composable
 fun TradeHistoryCardView(
@@ -192,6 +194,50 @@ fun TradeHistoryCardView(
                     )
                 }
             }
+            Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .padding(start = 5.dp, end = 5.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth(0.45f))
+
+                {
+                    Text(
+                        "Realized PNL :",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+                    Text(
+                        ((Data.realizedPnl.toFloat() * 100).roundToInt().toFloat() /100).toString(),
+                        color = determineRPNLColor(Data.realizedPnl.toFloat()),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.fillMaxWidth(0.1f))
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth(1f))
+
+                {
+                    Text(
+                        "",
+                        color = PurpleText,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        "",
+                        color = YellowishRed,
+                        fontSize = 14.sp
+                    )
+                }
+            }
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
         }
     }
@@ -223,4 +269,14 @@ fun determineTypeColor (s : Boolean): Color{
         Color.Gray
     }
 
+}
+
+fun determineRPNLColor(s : Float): Color{
+    return if (s > 0) {
+        GreenText
+    }else if (s < 0){
+        Red
+    } else  {
+        YellowText
+    }
 }

@@ -32,9 +32,7 @@ import com.example.tradingbot.domain.use_cases.restapi.CustomWarningAlertWithTwo
 import com.example.tradingbot.domain.use_cases.restapi.WarningsCallBack
 import com.example.tradingbot.presentation.app.MainTopBar
 import com.example.tradingbot.presentation.main.components.TermsOfUseAndPrivacyPolicy
-import com.example.tradingbot.presentation.main.screencomponents.LandingPage
-import com.example.tradingbot.presentation.main.screencomponents.SignInPage
-import com.example.tradingbot.presentation.main.screencomponents.Signup
+import com.example.tradingbot.presentation.main.screencomponents.*
 import com.example.tradingbot.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +50,7 @@ class MainActivity : ComponentActivity() {
                 val isSignInPageOpen = remember { mutableStateOf(false) }
                 val isSignUpPageOpen = remember { mutableStateOf(false) }
                 val isForgetPasswordPageOpen = remember { mutableStateOf(false) }
-
+                val isResetPasswordPageOpen = remember { mutableStateOf(false) }
 
                 val isAppPowerOffCalled = remember { mutableStateOf(false) }
 
@@ -61,8 +59,8 @@ class MainActivity : ComponentActivity() {
 
                 Column(verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier
-                    .fillMaxSize(1f)
-                    .background(gradientGrayblack)) {
+                        .fillMaxSize(1f)
+                        .background(gradientGrayblack)) {
 
                     if(!isLandingPageOpen.value){
                         MainTopBar(iconExpanded = isAppPowerOffCalled)
@@ -88,8 +86,34 @@ class MainActivity : ComponentActivity() {
                         )
 
                     }else if(isSignUpPageOpen.value){
-                        Signup(isLandingPageOpen = isLandingPageOpen, isSignInOpen = isSignInPageOpen, isSignUpOpen = isSignUpPageOpen)
+                        Signup(
+                            isSignInOpen = isSignInPageOpen,
+                            isSignUpOpen = isSignUpPageOpen,
+                            protoViewModelLoginModel = protoViewModelLoginModel,
+                            progress = progress,
+                            isFailureOccurred = isFailureOccurred
+                        )
 
+                    } else if (isForgetPasswordPageOpen.value){
+                        ForgetPasswordScreen(
+                            protoViewModelLoginModel = protoViewModelLoginModel,
+                            progress = progress,
+                            isFailureOccurred = isFailureOccurred,
+                            isSignInPageOpen = isSignInPageOpen,
+                            isForgetPasswordPageOpen = isForgetPasswordPageOpen,
+                            isResetPasswordPageOpen = isResetPasswordPageOpen
+                        )
+
+                    }
+                    else if (isResetPasswordPageOpen.value){
+                        ResetPasswordScreen(
+                            protoViewModelLoginModel = protoViewModelLoginModel,
+                            progress = progress,
+                            isFailureOccurred = isFailureOccurred,
+                            isSignInPageOpen = isSignInPageOpen,
+                            isForgetPasswordPageOpen = isForgetPasswordPageOpen,
+                            isResetPasswordPageOpen =isResetPasswordPageOpen
+                        )
                     }
 
                     TermsOfUseAndPrivacyPolicy()
