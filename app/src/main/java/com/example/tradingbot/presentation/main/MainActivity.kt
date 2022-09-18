@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 if (isFailureOccurred.value) {
                     CustomWarningAlertWithRetry(
                         message = internetError,
-                        color = Color.LightGray,
+                        color = PopUpMainScreen,
                         warningsCallBack = object : WarningsCallBack {
                             override fun onRetry() {
 //                                increment.value = 1
@@ -142,7 +142,7 @@ class MainActivity : ComponentActivity() {
                         firstButtonText= no,
                         secondButtonText= yes,
                         message = powerOff,
-                        color = Color.LightGray,
+                        color = PopUpMainScreen,
                         warningsCallBack = object : WarningsCallBack {
                             override fun onRetry() {
                                 activity?.finish()

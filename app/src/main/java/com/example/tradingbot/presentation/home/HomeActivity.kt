@@ -156,7 +156,7 @@ class HomeActivity : ComponentActivity() {
                 if (isFailureOccurred.value) {
                     CustomWarningAlertWithRetry(
                         message = internetError,
-                        color = Color.LightGray,
+                        color = PopUpHomeScreen,
                         warningsCallBack = object : WarningsCallBack {
                             override fun onRetry() {
 //                                increment.value = 1

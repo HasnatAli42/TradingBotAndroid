@@ -86,7 +86,7 @@ fun CustomWarningAlertWithTwoButtons(firstButtonText:String,secondButtonText:Str
                                 strokeWidth = 1.dp.toPx()
                             )
                         }) {
-                    Text(text = "Alert",Modifier.padding(top=5.dp,start=5.dp,bottom=5.dp))
+                    Text(text = "Alert",Modifier.padding(top=5.dp,start=5.dp,bottom=5.dp),color = Color.Red)
                     Text(text = " !",Modifier.padding(top=5.dp,bottom=5.dp),color = YellowishRed)
                 }
                 Row(Modifier
@@ -158,7 +158,7 @@ fun CustomWarningAlertWithRetry(message:String,color: Color, warningsCallBack: W
                                 strokeWidth = 1.dp.toPx()
                             )
                         }) {
-                    Text(text = "Alert",Modifier.padding(top=5.dp,start=5.dp,bottom=5.dp))
+                    Text(text = "Alert",Modifier.padding(top=5.dp,start=5.dp,bottom=5.dp),color = Color.Red)
                     Text(text = " !",Modifier.padding(top=5.dp,bottom=5.dp),color = YellowishRed)
                 }
                 Row(Modifier
