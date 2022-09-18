@@ -21,6 +21,8 @@ import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
 import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
 import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModelApi
+import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesResponseModel
+import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesResponseModelApi
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModelApi
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
@@ -65,7 +67,7 @@ fun LoginApi(
                         val responseModel =
                             Gson().fromJson(response, LoginResponseModel::class.java)
                         if (responseModel.msg == "Login Success" && httpsStatusCode == 200) {
-                            displayErrorMsg(context, responseModel.msg.toString())
+//                            displayErrorMsg(context, responseModel.msg.toString())
                             protoViewModelLoginModel.updateValueLogin(
                                 email,
                                 password
@@ -288,6 +290,50 @@ fun OpenOrdersApi(
                         openOrdersResponseModel.value.openOrders.clear()
                         if (responseModel.size > 0){
                             openOrdersResponseModel.value.openOrders.addAll(responseModel)
+                        }
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
+
+
+@Composable
+fun OpenTradesApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    openTradesResponseModel: MutableState<OpenTradesResponseModel>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+//        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            positionsUrl,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        val responseModel =
+                            Gson().fromJson(response, OpenTradesResponseModelApi::class.java)
+                        openTradesResponseModel.value.openTrades.clear()
+                        if (responseModel.size > 0){
+                            openTradesResponseModel.value.openTrades.addAll(responseModel)
                         }
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {

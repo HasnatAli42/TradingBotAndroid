@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
                 val isSignUpPageOpen = remember { mutableStateOf(false) }
                 val isForgetPasswordPageOpen = remember { mutableStateOf(false) }
 
+
                 val isAppPowerOffCalled = remember { mutableStateOf(false) }
 
                 val progress = remember { mutableStateOf(false) }

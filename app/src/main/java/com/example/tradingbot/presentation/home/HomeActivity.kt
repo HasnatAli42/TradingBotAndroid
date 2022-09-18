@@ -1,6 +1,7 @@
 package com.example.tradingbot.presentation.home
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
+import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesResponseModel
 import com.example.tradingbot.domain.model.OrderHistoryResponseModel.OrderHistoryResponseModel
 import com.example.tradingbot.domain.model.ProfileModel.ProfileResponseModel
 import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
@@ -24,10 +26,8 @@ import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryRespons
 import com.example.tradingbot.domain.use_cases.restapi.*
 import com.example.tradingbot.presentation.app.HomeBottomBar
 import com.example.tradingbot.presentation.app.HomeTopBar
-import com.example.tradingbot.presentation.home.screencomponents.HomeScreen
-import com.example.tradingbot.presentation.home.screencomponents.OpenOrdersScreen
-import com.example.tradingbot.presentation.home.screencomponents.OrderHistoryScreen
-import com.example.tradingbot.presentation.home.screencomponents.TradeHistoryScreen
+import com.example.tradingbot.presentation.home.screencomponents.*
+import com.example.tradingbot.presentation.main.MainActivity
 import com.example.tradingbot.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,6 +46,7 @@ class HomeActivity : ComponentActivity() {
                 val isFailureOccurred = remember { mutableStateOf(false) }
                 val profileName = remember { mutableStateOf(profileData.value.first_name) }
                 val profileImg = remember { mutableStateOf(profileData.value.drive_image_url) }
+                val isPopUpMenu = remember { mutableStateOf(false) }
 
 //                TabsButtonStart
                 val homeButton = remember { mutableStateOf(true) }
@@ -60,6 +61,7 @@ class HomeActivity : ComponentActivity() {
                 val tradeHistoryResponseModel = remember { mutableStateOf(TradeHistoryResponseModel(tradeHistory = arrayListOf())) }
                 val orderHistoryResponseModel = remember { mutableStateOf(OrderHistoryResponseModel(orderHistory = arrayListOf())) }
                 val openOrdersResponseModel = remember { mutableStateOf(OpenOrderResponseModel(openOrders = arrayListOf())) }
+                val openTradesResponseModel = remember { mutableStateOf(OpenTradesResponseModel(openTrades = arrayListOf())) }
 
                 if (isInitiated.value){
                     isInitiated.value = false
@@ -86,7 +88,7 @@ class HomeActivity : ComponentActivity() {
                     horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier
                     .fillMaxSize(1f)) {
 
-                    HomeTopBar(profileName = profileName, profileImage = profileImg)
+                    HomeTopBar(profileName = profileName, profileImage = profileImg, profilePicClickState = isPopUpMenu)
 
                     Column(verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -109,7 +111,12 @@ class HomeActivity : ComponentActivity() {
                                 openOrdersResponseModel = openOrdersResponseModel
                             )
                         }else if (positionButton.value){
-                            Text(text = "Position Screen")
+                            OpenTradesScreen(
+                                protoViewModelLoginModel = protoViewModelLoginModel,
+                                progress = progress,
+                                isFailureOccurred = isFailureOccurred,
+                                openTradesResponseModel = openTradesResponseModel
+                            )
                         }else if (tradeHistoryButton.value){
                             TradeHistoryScreen(
                                 protoViewModelLoginModel = protoViewModelLoginModel,
@@ -160,25 +167,14 @@ class HomeActivity : ComponentActivity() {
                     )
                 }
                 if (isLogoutCalled.value){
-                    val activity = (LocalContext.current as? Activity)
-                    CustomWarningAlertWithTwoButtons(
-                        firstButtonText= no,
-                        secondButtonText= yes,
-                        message = powerOff,
-                        color = Color.LightGray,
-                        warningsCallBack = object : WarningsCallBack {
-                            override fun onRetry() {
-                                activity?.finish()
-                                isFailureOccurred.value = false
-                            }
+                    val context = LocalContext.current as ComponentActivity
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.finish()
+                    context!!.startActivity(intent)
 
-                            override fun onCancel() {
-                                isLogoutCalled.value = false
-                            }
-                        }
-                    )
 
                 }
+                ProfilePopUp(isPopUpState = isPopUpMenu, isLogoutCalled= isLogoutCalled)
 
                 }
             }

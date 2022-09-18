@@ -83,7 +83,6 @@ fun SignInPage(
             message = message,
             valueUpdateStatus = object : ValueUpdateStatus {
                 override fun valueUpdateSuccessful() {
-//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     context.finish()
                     context!!.startActivity(intent)
                 }

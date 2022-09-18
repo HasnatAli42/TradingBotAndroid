@@ -14,43 +14,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.functions.time.getDateTime
-import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
-import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
 import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
-import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModel
-import com.example.tradingbot.domain.model.TradeHistoryModel.TradeHistoryResponseModelItem
-import com.example.tradingbot.domain.use_cases.restapi.AccountInfoApi
+import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesResponseModel
 import com.example.tradingbot.domain.use_cases.restapi.OpenOrdersApi
-import com.example.tradingbot.domain.use_cases.restapi.TradeHistoryApi
+import com.example.tradingbot.domain.use_cases.restapi.OpenTradesApi
 import com.example.tradingbot.domain.use_cases.restapi.ValueUpdateStatus
-import com.example.tradingbot.presentation.home.components.AccountInFoCardView
 import com.example.tradingbot.presentation.home.components.OpenOrderCardView
-import com.example.tradingbot.presentation.home.components.TradeHistoryCardView
+import com.example.tradingbot.presentation.home.components.OpenTradesCardView
 
 @Composable
-fun OpenOrdersScreen(
+fun OpenTradesScreen(
     protoViewModelLoginModel: ProtoViewModelLoginModel,
     progress: MutableState<Boolean>,
     isFailureOccurred : MutableState<Boolean>,
-    openOrdersResponseModel: MutableState<OpenOrderResponseModel>,
+    openTradesResponseModel: MutableState<OpenTradesResponseModel>,
 ){
     val refresh = remember { mutableStateOf(true) }
-    val openOrdersResponseModelLocal = remember { mutableStateOf(OpenOrderResponseModel(openOrders = arrayListOf())) }
+    val openTradesResponseModelLocal = remember { mutableStateOf(OpenTradesResponseModel(openTrades = arrayListOf())) }
 
     if (refresh.value){
         refresh.value = false
-        OpenOrdersApi(
+        OpenTradesApi(
             protoViewModelLoginModel = protoViewModelLoginModel,
             progress = progress,
-            openOrdersResponseModel = openOrdersResponseModelLocal,
+            openTradesResponseModel = openTradesResponseModelLocal,
             isFailureOccurred = isFailureOccurred,
             valueUpdateStatus = object : ValueUpdateStatus {
                 override fun valueUpdateSuccessful() {
-                    openOrdersResponseModelLocal.value.openOrders.sortByDescending {
-                        it.dateTime = getDateTime(it.time)
-                        it.time
-                    }
-                    openOrdersResponseModel.value = openOrdersResponseModelLocal.value
+                    openTradesResponseModel.value = openTradesResponseModelLocal.value
+                    refresh.value = true
                 }
                 override fun valueUpdateFailure() {
                     isFailureOccurred.value = true
@@ -68,15 +60,15 @@ fun OpenOrdersScreen(
             .verticalScroll(rememberScrollState())
     )
     {
-        if (openOrdersResponseModel.value.openOrders.size > 0){
-            openOrdersResponseModel.value.openOrders.forEach { data ->
+        if (openTradesResponseModel.value.openTrades.size > 0){
+            openTradesResponseModel.value.openTrades.forEach { data ->
                 Spacer(modifier = Modifier.padding(top= 5.dp))
-                OpenOrderCardView(Data = data)
+                OpenTradesCardView(Data = data)
                 Spacer(modifier = Modifier.padding(top= 5.dp))
             }
         } else {
             if (!progress.value){
-                Text(text = "Opps, No Open Orders Found", color = Color.Gray)
+                Text(text = "Opps, No Open Trades Found", color = Color.Gray)
             }
         }
 

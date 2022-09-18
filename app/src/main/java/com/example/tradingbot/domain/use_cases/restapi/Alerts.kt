@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -206,9 +207,29 @@ fun CustomProgressBar(){
             Column(Modifier.fillMaxSize(1f), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator(color = YellowishRed)
             }
-
-
         }
     }
+}
+
+
+@Composable
+fun ProfilePopUp(isPopUpState : MutableState<Boolean>, isLogoutCalled : MutableState<Boolean>){
+    Box(
+        modifier = Modifier
+            .fillMaxSize(1f)
+            .background(color = Color.Transparent),
+    ) {
+        Column(modifier = Modifier.fillMaxSize(1f)) {
+            DropdownMenu(
+                expanded = isPopUpState.value,
+                onDismissRequest = { isPopUpState.value = false },
+            ) {
+                DropdownMenuItem(onClick = { isLogoutCalled.value = true }) {
+                    Text("Logout")
+                }
+            }
+        }
+    }
+
 }
 
