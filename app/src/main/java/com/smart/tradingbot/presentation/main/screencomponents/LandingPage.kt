@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.smart.tradingbot.presentation.main.components.LandingLayout
 import com.smart.tradingbot.ui.theme.*
+import com.smart.tradingbot.R
 
 @Composable
 fun LandingPage(isLandingPageOpen: MutableState<Boolean>, isSignInPageOpen: MutableState<Boolean>) {

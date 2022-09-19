@@ -27,6 +27,7 @@ import com.smart.tradingbot.domain.use_cases.restapi.ValueUpdateStatus
 import com.smart.tradingbot.presentation.main.components.InputField
 import com.smart.tradingbot.presentation.main.components.ScreenShiftButton
 import com.smart.tradingbot.ui.theme.*
+import com.smart.tradingbot.R
 
 @Composable
 fun ForgetPasswordScreen(

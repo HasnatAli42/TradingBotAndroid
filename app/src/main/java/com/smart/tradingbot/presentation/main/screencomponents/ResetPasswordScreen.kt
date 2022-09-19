@@ -27,6 +27,7 @@ import com.smart.tradingbot.domain.validations.OtpFieldsValidation
 import com.smart.tradingbot.presentation.main.components.InputFieldWithError
 import com.smart.tradingbot.presentation.main.components.ScreenShiftButton
 import com.smart.tradingbot.ui.theme.*
+import com.smart.tradingbot.R
 
 @Composable
 fun ResetPasswordScreen(

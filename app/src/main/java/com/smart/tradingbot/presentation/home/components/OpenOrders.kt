@@ -90,7 +90,7 @@ fun OpenOrderCardView(
                         fontSize = 14.sp
                     )
                     Text(
-                        Data.price,
+                        if(Data.price.toInt() == 0){Data.stopPrice}else{Data.price},
                         color = Color.Black,
                         fontSize = 14.sp
                     )
