@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "756609522993",
-    "project_id": "tradingbot-2d3ed",
-    "storage_bucket": "tradingbot-2d3ed.appspot.com"
+    "project_number": "618504424639",
+    "project_id": "tradingbot-ddf2b",
+    "storage_bucket": "tradingbot-ddf2b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:756609522993:android:3a1d8afc0f786f75386410",
+        "mobilesdk_app_id": "1:618504424639:android:2ae695c8373e86637aca0a",
         "android_client_info": {
-          "package_name": "com.example.tradingbot"
+          "package_name": "com.smart.tradingbot"
         }
       },
       "oauth_client": [
         {
-          "client_id": "756609522993-3c68hpbck7h50971hd9k687oftdfud95.apps.googleusercontent.com",
+          "client_id": "618504424639-pu3ipun6hllkj03li6jvjq0ore16g7p2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnOz0RrdsvPpaQjI-BLgkQOYgy-9-HQb8"
+          "current_key": "AIzaSyBU_r_NrxJGzE5s_q5T1QawMb5Al-1OkOQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "756609522993-3c68hpbck7h50971hd9k687oftdfud95.apps.googleusercontent.com",
+              "client_id": "618504424639-pu3ipun6hllkj03li6jvjq0ore16g7p2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
