@@ -88,7 +88,7 @@ class HomeActivity : ComponentActivity() {
                     )
                 }
 
-                if (isStatusCalled.value){
+                if (isStatusCalled.value && !positionButton.value){
                     isStatusCalled.value = false
                     GetBotStatusApi(
                         protoViewModelLoginModel = protoViewModelLoginModel,
@@ -116,6 +116,22 @@ class HomeActivity : ComponentActivity() {
                         isFailureOccurred = isFailureOccurred,
                         valueUpdateStatus = object : ValueUpdateStatus{
                             override fun valueUpdateSuccessful() {
+                            }
+
+                            override fun valueUpdateFailure() {
+                                isFailureOccurred.value = true
+                            }
+                        }
+                    )
+                    GetBotStatusApi(
+                        protoViewModelLoginModel = protoViewModelLoginModel,
+                        progress = progress,
+                        CurrentBotStatus = currentStatus,
+                        isFailureOccurred = isFailureOccurred,
+                        valueUpdateStatus = object : ValueUpdateStatus{
+                            override fun valueUpdateSuccessful() {
+                                currentStatus.value = currentStatus.value
+                                isStatusCalled.value = true
                             }
 
                             override fun valueUpdateFailure() {
@@ -160,7 +176,8 @@ class HomeActivity : ComponentActivity() {
                                 protoViewModelLoginModel = protoViewModelLoginModel,
                                 progress = progress,
                                 isFailureOccurred = isFailureOccurred,
-                                openTradesResponseModel = openTradesResponseModel
+                                openTradesResponseModel = openTradesResponseModel,
+                                currentStatus = currentStatus
                             )
                         }else if (tradeHistoryButton.value){
                             TradeHistoryScreen(

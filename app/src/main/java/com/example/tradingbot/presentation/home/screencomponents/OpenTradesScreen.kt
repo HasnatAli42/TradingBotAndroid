@@ -16,6 +16,7 @@ import com.example.tradingbot.common.protoDataStore.ProtoViewModelLoginModel
 import com.example.tradingbot.domain.functions.time.getDateTime
 import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
 import com.example.tradingbot.domain.model.OpenTradesResponseModel.OpenTradesResponseModel
+import com.example.tradingbot.domain.use_cases.restapi.GetBotStatusApi
 import com.example.tradingbot.domain.use_cases.restapi.OpenOrdersApi
 import com.example.tradingbot.domain.use_cases.restapi.OpenTradesApi
 import com.example.tradingbot.domain.use_cases.restapi.ValueUpdateStatus
@@ -28,9 +29,11 @@ fun OpenTradesScreen(
     progress: MutableState<Boolean>,
     isFailureOccurred : MutableState<Boolean>,
     openTradesResponseModel: MutableState<OpenTradesResponseModel>,
+    currentStatus : MutableState<Boolean>,
 ){
     val refresh = remember { mutableStateOf(true) }
     val openTradesResponseModelLocal = remember { mutableStateOf(OpenTradesResponseModel(openTrades = arrayListOf())) }
+    val apiReturned = remember { mutableStateOf(false) }
 
     if (refresh.value){
         refresh.value = false
@@ -42,8 +45,27 @@ fun OpenTradesScreen(
             valueUpdateStatus = object : ValueUpdateStatus {
                 override fun valueUpdateSuccessful() {
                     openTradesResponseModel.value = openTradesResponseModelLocal.value
+                    apiReturned.value = true
+                }
+                override fun valueUpdateFailure() {
+                    isFailureOccurred.value = true
+                }
+            }
+        )
+    }
+    if (apiReturned.value) {
+        apiReturned.value = false
+        GetBotStatusApi(
+            protoViewModelLoginModel = protoViewModelLoginModel,
+            progress = progress,
+            CurrentBotStatus = currentStatus,
+            isFailureOccurred = isFailureOccurred,
+            valueUpdateStatus = object : ValueUpdateStatus {
+                override fun valueUpdateSuccessful() {
+                    currentStatus.value = currentStatus.value
                     refresh.value = true
                 }
+
                 override fun valueUpdateFailure() {
                     isFailureOccurred.value = true
                 }
