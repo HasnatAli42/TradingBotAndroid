@@ -63,7 +63,9 @@ fun MainTopBar(iconExpanded: MutableState<Boolean>) {
 }
 
 @Composable
-fun HomeTopBar(profileName : MutableState<String>, profileImage : MutableState<String> ,profilePicClickState : MutableState<Boolean>){
+fun HomeTopBar(profileName : MutableState<String>, profileImage : MutableState<String> ,profilePicClickState : MutableState<Boolean>
+               ,currentStatus : MutableState<Boolean>
+               ,statusChanged : MutableState<Boolean>){
     Box(
         modifier = Modifier
             .fillMaxWidth(1f)
@@ -88,6 +90,8 @@ fun HomeTopBar(profileName : MutableState<String>, profileImage : MutableState<S
                     Modifier.size(150.dp, 40.dp)
                 )
             }
+            BotStatus(currentStatus = currentStatus,
+            statusChanged = statusChanged )
 
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { profilePicClickState.value = true }) {
                 Text(text = profileName.value, fontFamily = RobotoCondensed, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)

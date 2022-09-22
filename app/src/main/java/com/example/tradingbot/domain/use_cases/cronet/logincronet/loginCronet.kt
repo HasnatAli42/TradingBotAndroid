@@ -109,8 +109,8 @@ class loginCronet {
         )
 
         val requestURL = requestBuilder!!
+            .addHeader("Authorization", "Bearer $token")
             .addHeader("Content-Type", "application/json")
-            .addHeader("securityToken", token)
             .setHttpMethod("POST")
             .setUploadDataProvider(UploadDataProviders.create(param.toByteArray()), executor)
 

@@ -39,9 +39,7 @@ class ProtoViewModelLoginModel @Inject internal constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateValueMobileNumber(MobileNumber)
         }
-    fun updateValueNotificationSettings(isFanEnrollmentPushNotif:Boolean,
-    isFanMsgPushNotif:Boolean,
-    isPushNotification:Boolean)= viewModelScope.launch(Dispatchers.IO) {
+    fun updateValueNotificationSettings(isFanEnrollmentPushNotif:Boolean, isFanMsgPushNotif:Boolean, isPushNotification:Boolean)= viewModelScope.launch(Dispatchers.IO) {
         repository.updateValueNotificationSettings(isFanEnrollmentPushNotif,isFanMsgPushNotif,isPushNotification)
 
 

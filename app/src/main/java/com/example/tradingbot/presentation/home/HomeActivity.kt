@@ -41,6 +41,7 @@ class HomeActivity : ComponentActivity() {
                 val context = LocalContext.current as ComponentActivity
                 val profileData = remember { mutableStateOf(ProfileResponseModel(email = "",first_name="",last_name="",id=0,drive_image_url="")) }
                 val isInitiated = remember { mutableStateOf(true) }
+                val isStatusCalled = remember { mutableStateOf(true) }
 
                 val progress = remember { mutableStateOf(false) }
                 val isLogoutCalled = remember { mutableStateOf(false) }
@@ -48,6 +49,8 @@ class HomeActivity : ComponentActivity() {
                 val profileName = remember { mutableStateOf(profileData.value.first_name) }
                 val profileImg = remember { mutableStateOf(profileData.value.drive_image_url) }
                 val isPopUpMenu = remember { mutableStateOf(false) }
+                val currentStatus = remember { mutableStateOf(false) }
+                val statusChanged = remember { mutableStateOf(false) }
 
 //                TabsButtonStart
                 val homeButton = remember { mutableStateOf(true) }
@@ -85,12 +88,52 @@ class HomeActivity : ComponentActivity() {
                     )
                 }
 
+                if (isStatusCalled.value){
+                    isStatusCalled.value = false
+                    GetBotStatusApi(
+                        protoViewModelLoginModel = protoViewModelLoginModel,
+                        progress = progress,
+                        CurrentBotStatus = currentStatus,
+                        isFailureOccurred = isFailureOccurred,
+                        valueUpdateStatus = object : ValueUpdateStatus{
+                            override fun valueUpdateSuccessful() {
+                                currentStatus.value = currentStatus.value
+                                isStatusCalled.value = true
+                            }
+
+                            override fun valueUpdateFailure() {
+                                isFailureOccurred.value = true
+                            }
+                        }
+                    )
+                }
+
+                if (statusChanged.value){
+                    statusChanged.value = false
+                    BotStatusApi(
+                        protoViewModelLoginModel = protoViewModelLoginModel,
+                        progress = progress,
+                        isFailureOccurred = isFailureOccurred,
+                        valueUpdateStatus = object : ValueUpdateStatus{
+                            override fun valueUpdateSuccessful() {
+                            }
+
+                            override fun valueUpdateFailure() {
+                                isFailureOccurred.value = true
+                            }
+                        }
+                    )
+                }
+
 
                 Column(verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier
                     .fillMaxSize(1f)) {
 
-                    HomeTopBar(profileName = profileName, profileImage = profileImg, profilePicClickState = isPopUpMenu)
+                    HomeTopBar(profileName = profileName, profileImage = profileImg, profilePicClickState = isPopUpMenu,
+                        currentStatus = currentStatus,
+                        statusChanged = statusChanged
+                    )
 
                     Column(verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -175,7 +218,9 @@ class HomeActivity : ComponentActivity() {
 
 
                 }
-                ProfilePopUp(isPopUpState = isPopUpMenu, isLogoutCalled= isLogoutCalled)
+                ProfilePopUp(isPopUpState = isPopUpMenu, isLogoutCalled= isLogoutCalled,
+                    currentStatus = currentStatus, statusChanged = statusChanged
+                )
 
                 }
             }

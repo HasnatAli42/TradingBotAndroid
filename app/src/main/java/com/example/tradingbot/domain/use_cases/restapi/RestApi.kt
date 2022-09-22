@@ -17,6 +17,7 @@ import com.example.tradingbot.domain.functions.callbacks.ValueUpdateStatusLogin
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModel
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelApi
 import com.example.tradingbot.domain.model.AccountInfoModel.AccountInfoResponseModelItem
+import com.example.tradingbot.domain.model.BotStatusResponseModel.BotStatusResponseModel
 import com.example.tradingbot.domain.model.LoginModel.LoginRequestModel
 import com.example.tradingbot.domain.model.LoginModel.LoginResponseModel
 import com.example.tradingbot.domain.model.OpenOrdersResponseModel.OpenOrderResponseModel
@@ -490,6 +491,88 @@ fun OpenTradesApi(
                         if (responseModel.size > 0){
                             openTradesResponseModel.value.openTrades.addAll(responseModel)
                         }
+                        valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        displayErrorMsg(context, responseModel.errors.detail.toString())
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
+
+@Composable
+fun BotStatusApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus,
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+        progress.value = true
+        val json = Gson().toJson("")
+        request.sendParametersAndSecurityTokenRequest(
+            botStatusUrl,
+            json,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if(httpsStatusCode == 200){
+                        val responseModel =
+                            Gson().fromJson(response, LoginResponseModel::class.java)
+                        displayErrorMsg(context, responseModel.msg.toString())
+                            valueUpdateStatus.valueUpdateSuccessful()
+                    } else {
+                        val responseModel =
+                            Gson().fromJson(response, ErrorModel::class.java)
+                        if (!responseModel.errors.detail.isNullOrEmpty()){
+                            displayErrorMsg(context, responseModel.errors.non_field_errors.toString())
+                        }
+                    }
+                }
+                override fun onFailure() {
+                    progress.value = false
+                    isFailureOccurred.value = true
+                    valueUpdateStatus.valueUpdateFailure()
+                }
+            })
+    }
+}
+
+@Composable
+fun GetBotStatusApi(
+    protoViewModelLoginModel: ProtoViewModelLoginModel,
+    progress: MutableState<Boolean>,
+    CurrentBotStatus: MutableState<Boolean>,
+    isFailureOccurred : MutableState<Boolean>,
+    valueUpdateStatus: ValueUpdateStatus
+) {
+    val context = LocalContext.current as ComponentActivity
+    val request = loginCronet()
+    protoViewModelLoginModel.tokenLiveData.observe(context) {
+//        progress.value = true
+        request.sendSecurityTokenOnlyRequest(
+            botStatusUrl,
+            it.securityToken.toString(),
+            object : ApiCallBack {
+                override fun onSuccess(byteArray: ByteArray, httpsStatusCode: Int) {
+                    progress.value = false
+                    val response = String(byteArray)
+                    if (httpsStatusCode == 200) {
+                        val responseModel =
+                            Gson().fromJson(response, BotStatusResponseModel::class.java)
+                        CurrentBotStatus.value = responseModel.is_bot_activate
                         valueUpdateStatus.valueUpdateSuccessful()
                     } else {
                         val responseModel =

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tradingbot.R
 import com.example.tradingbot.domain.functions.callbacks.ProgressBar
+import com.example.tradingbot.presentation.app.BotStatus
 import com.example.tradingbot.ui.theme.RobotoCondensed
 import com.example.tradingbot.ui.theme.YellowishRed
 import java.time.temporal.TemporalQueries.offset
@@ -213,7 +214,8 @@ fun CustomProgressBar(){
 
 
 @Composable
-fun ProfilePopUp(isPopUpState : MutableState<Boolean>, isLogoutCalled : MutableState<Boolean>){
+fun ProfilePopUp(isPopUpState : MutableState<Boolean>, isLogoutCalled : MutableState<Boolean>,
+                 currentStatus : MutableState<Boolean>, statusChanged : MutableState<Boolean>){
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
@@ -227,6 +229,10 @@ fun ProfilePopUp(isPopUpState : MutableState<Boolean>, isLogoutCalled : MutableS
                 DropdownMenuItem(onClick = { isLogoutCalled.value = true }) {
                     Text("Logout")
                 }
+//                DropdownMenuItem(onClick = {  }) {
+//                    BotStatus(currentStatus = currentStatus,
+//                        statusChanged = statusChanged )
+//                }
             }
         }
     }
